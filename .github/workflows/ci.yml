@@ -108,7 +108,10 @@ jobs:
 
       - name: Flush Redis test DB
         run: redis-cli -n 2 FLUSHDB
-
+      
+      - name: Build Tailwind
+        run: bin/rails tailwindcss:build
+        
       - name: Run RSpec tests
         run: bundle exec rspec --format documentation
 
