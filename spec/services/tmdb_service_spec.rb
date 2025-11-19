@@ -132,10 +132,10 @@ RSpec.describe TmdbService do
         "release_date" => "2010-07-16",
         "runtime" => 148,
         "popularity" => 50.5,
-        "genres" => [{ "id" => 28, "name" => "Action" }],
+        "genres" => [ { "id" => 28, "name" => "Action" } ],
         "credits" => {
-          "cast" => [{ "id" => 1, "name" => "Leonardo DiCaprio", "character" => "Cobb" }],
-          "crew" => [{ "id" => 2, "name" => "Christopher Nolan", "job" => "Director" }]
+          "cast" => [ { "id" => 1, "name" => "Leonardo DiCaprio", "character" => "Cobb" } ],
+          "crew" => [ { "id" => 2, "name" => "Christopher Nolan", "job" => "Director" } ]
         }
       }
     end
@@ -274,4 +274,3 @@ RSpec.describe TmdbService do
     end
   end
 end
-

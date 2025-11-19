@@ -10,7 +10,7 @@ class MoviesController < ApplicationController
 
     if @query.present?
       search_results = @tmdb_service.search_movies(@query, page: @page)
-      
+
       if search_results["error"]
         @error = search_results["error"]
         @movies = []
@@ -201,4 +201,3 @@ class MoviesController < ApplicationController
     end
   end
 end
-

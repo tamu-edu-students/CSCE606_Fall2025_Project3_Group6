@@ -4,4 +4,3 @@ class AddTmdbIdToGenres < ActiveRecord::Migration[8.0]
     add_index :genres, :tmdb_id
   end
 end
-

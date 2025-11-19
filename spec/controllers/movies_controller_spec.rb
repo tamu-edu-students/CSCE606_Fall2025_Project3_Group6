@@ -34,7 +34,7 @@ RSpec.describe MoviesController, type: :controller do
               "release_date" => "2010-07-16",
               "popularity" => 50.5,
               "vote_average" => 8.8,
-              "genre_ids" => [28, 878]
+              "genre_ids" => [ 28, 878 ]
             }
           ],
           "total_pages" => 1,
@@ -143,7 +143,7 @@ RSpec.describe MoviesController, type: :controller do
         "release_date" => "2010-07-16",
         "runtime" => 148,
         "popularity" => 50.5,
-        "genres" => [{ "id" => 28, "name" => "Action" }],
+        "genres" => [ { "id" => 28, "name" => "Action" } ],
         "credits" => {
           "cast" => [
             { "id" => 1, "name" => "Leonardo DiCaprio", "character" => "Cobb", "profile_path" => "/profile.jpg" }
@@ -246,7 +246,7 @@ RSpec.describe MoviesController, type: :controller do
     context "with valid query" do
       let(:search_results) do
         {
-          "results" => [{ "id" => 1, "title" => "Test Movie" }],
+          "results" => [ { "id" => 1, "title" => "Test Movie" } ],
           "total_pages" => 1,
           "total_results" => 1
         }
@@ -265,4 +265,3 @@ RSpec.describe MoviesController, type: :controller do
     end
   end
 end
-

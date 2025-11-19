@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Movies routes
-  resources :movies, only: [:index, :show]
+  resources :movies, only: [ :index, :show ]
   get "movies/search", to: "movies#search", as: :movies_search
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)

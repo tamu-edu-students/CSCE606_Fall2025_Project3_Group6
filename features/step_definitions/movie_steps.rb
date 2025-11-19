@@ -80,7 +80,7 @@ Given("the TMDb API is available") do
         "release_date" => "2010-07-16",
         "popularity" => 50.5,
         "vote_average" => 8.8,
-        "genre_ids" => [28, 878]
+        "genre_ids" => [ 28, 878 ]
       }
     ],
     "total_pages" => 1,
@@ -95,7 +95,7 @@ Given("the TMDb API is available") do
     "release_date" => "2010-07-16",
     "runtime" => 148,
     "popularity" => 50.5,
-    "genres" => [{ "id" => 28, "name" => "Action" }],
+    "genres" => [ { "id" => 28, "name" => "Action" } ],
     "credits" => {
       "cast" => [
         { "id" => 1, "name" => "Leonardo DiCaprio", "character" => "Cobb", "profile_path" => "/profile.jpg" }
@@ -371,4 +371,3 @@ end
 Then("the empty state should remain unchanged") do
   expect(page).to have_content("No movies found")
 end
-
