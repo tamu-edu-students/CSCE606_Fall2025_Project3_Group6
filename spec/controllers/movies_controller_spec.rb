@@ -9,6 +9,10 @@ RSpec.describe MoviesController, type: :controller do
 
   describe "GET #index" do
     context "with empty query" do
+      before do
+        allow(tmdb_service).to receive(:genres).and_return({ "genres" => [] })
+      end
+
       it "renders index template" do
         get :index
         expect(response).to have_http_status(:success)
@@ -83,7 +87,11 @@ RSpec.describe MoviesController, type: :controller do
           movies = assigns(:movies)
           expect(movies.all? do |m|
             next false unless m["release_date"]
-            year = Date.parse(m["release_date"]).year rescue nil
+            begin
+              year = Date.parse(m["release_date"]).year
+            rescue ArgumentError, TypeError
+              next false
+            end
             year && (year / 10) * 10 == 2010
           end).to be true
         end
@@ -166,6 +174,10 @@ RSpec.describe MoviesController, type: :controller do
 
     context "with cached movie" do
       let!(:movie) { create(:movie, tmdb_id: tmdb_id, cached_at: 1.hour.ago) }
+
+      before do
+        allow(tmdb_service).to receive(:similar_movies).and_return({ "results" => [] })
+      end
 
       it "loads movie from database" do
         get :show, params: { id: tmdb_id }

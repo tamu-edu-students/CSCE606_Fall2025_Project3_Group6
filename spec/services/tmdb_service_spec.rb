@@ -143,7 +143,7 @@ RSpec.describe TmdbService do
     context "with valid tmdb_id" do
       it "returns movie details" do
         stub_request(:get, "#{base_url}/movie/#{tmdb_id}")
-          .with(query: hash_including(api_key: api_key))
+          .with(query: hash_including(api_key: api_key, append_to_response: "credits,videos"))
           .to_return(status: 200, body: response_body.to_json)
 
         result = service.movie_details(tmdb_id)
@@ -154,6 +154,7 @@ RSpec.describe TmdbService do
 
       it "caches movie details" do
         stub_request(:get, "#{base_url}/movie/#{tmdb_id}")
+          .with(query: hash_including(append_to_response: "credits,videos"))
           .to_return(status: 200, body: response_body.to_json)
 
         service.movie_details(tmdb_id)

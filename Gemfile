@@ -65,6 +65,7 @@ group :development, :test do
   gem "dotenv-rails"
   gem "webmock"
   gem "shoulda-matchers"
+  gem "rails-controller-testing"
 end
 
 group :test do
