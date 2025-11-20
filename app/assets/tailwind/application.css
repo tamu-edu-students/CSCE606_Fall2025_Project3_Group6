@@ -1,39 +1,49 @@
 @import "tailwindcss";
 
-/* Custom Cinematico Theme (Tailwind v4 @theme) */
+/* ===== CINEMATICO THEME COLORS ===== */
 @theme {
-  --color-cinematico-black: #0A0A0F;
-  --color-cinematico-gold:  #D4AF37;
-  --color-cinematico-grey:  #6C757D;
-  --color-cinematico-light: #F2F2F2;
-
   --font-cinzel: "Cinzel", serif;
   --font-inter: "Inter", sans-serif;
+
+  --color-cinematico-black: #0b0b0b;
+  --color-cinematico-gold: #d4af37;
+  --color-cinematico-grey: #1a1a1a;
+  --color-cinematico-light: #e5e5e5;
 }
 
-/* Glassmorphism Utilities */
-@layer utilities {
-  .glass {
-    @apply backdrop-blur-xl bg-[rgba(255,255,255,0.07)] border border-[rgba(255,255,255,0.15)] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.25)];
-  }
+/* ===== GLASS MORPHISM ===== */
+/* High contrast glass layers */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+}
 
-  .glass-dark {
-    @apply backdrop-blur-xl bg-[rgba(10,10,15,0.60)] border border-[rgba(255,255,255,0.1)] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.35)];
-  }
+.glass-dark {
+  background: rgba(20, 20, 20, 0.55);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+}
 
-  .glass-thin {
-    @apply backdrop-blur-md bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.20)];
-  }
+.glass-thin {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
 
-  .feature-card {
-    @apply p-6 rounded-xl transition hover:scale-[1.02]
-           backdrop-blur-xl bg-[rgba(255,255,255,0.07)]
-           border border-[rgba(255,255,255,0.14)]
-           shadow-[0_8px_32px_rgba(0,0,0,0.25)];
-  }
 
-  .step-circle {
-    @apply w-16 h-16 mx-auto rounded-full flex items-center justify-center
-           text-black font-bold text-xl bg-cinematico-gold;
-  }
+
+/* Cards */
+.feature-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+.feature-card:hover {
+  background: rgba(255,255,255,0.1);
 }

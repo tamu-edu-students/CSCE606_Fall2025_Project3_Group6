@@ -1,211 +1,35 @@
 {
   "RSpec": {
     "coverage": {
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/helpers/application_helper.rb": {
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/controllers/application_controller.rb": {
         "lines": [
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/helpers/home_helper.rb": {
-        "lines": [
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/achievement.rb": {
-        "lines": [
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/application_record.rb": {
-        "lines": [
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/email_preference.rb": {
-        "lines": [
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/follow.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/genre.rb": {
-        "lines": [
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/list_item.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/list.rb": {
-        "lines": [
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/log.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/log_tag.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/movie_genre.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/movie_person.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/movie.rb": {
-        "lines": [
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/notification.rb": {
-        "lines": [
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/person.rb": {
-        "lines": [
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/review.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/tag.rb": {
-        "lines": [
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/user_achievement.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/user.rb": {
-        "lines": [
-          1,
+          0,
           null,
-          null,
-          1,
-          null,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/user_stat.rb": {
-        "lines": [
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/vote.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/watchlist.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
+          0,
+          0
         ],
         "branches": {}
       },
       "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/controllers/home_controller.rb": {
         "lines": [
-          1,
-          1,
-          null,
-          null
+          0,
+          0,
+          0,
+          0
         ],
         "branches": {}
       },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/controllers/application_controller.rb": {
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/helpers/application_helper.rb": {
         "lines": [
-          1,
-          null,
-          1,
-          null
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/helpers/home_helper.rb": {
+        "lines": [
+          0,
+          0
         ],
         "branches": {}
       },
@@ -229,9 +53,192 @@
           0
         ],
         "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/mailers/devise_mailer.rb": {
+        "lines": [
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/achievement.rb": {
+        "lines": [
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/application_record.rb": {
+        "lines": [
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/email_preference.rb": {
+        "lines": [
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/follow.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/genre.rb": {
+        "lines": [
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/list.rb": {
+        "lines": [
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/list_item.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/log.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/log_tag.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/movie.rb": {
+        "lines": [
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/movie_genre.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/movie_person.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/notification.rb": {
+        "lines": [
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/person.rb": {
+        "lines": [
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/review.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/tag.rb": {
+        "lines": [
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/user.rb": {
+        "lines": [
+          0,
+          null,
+          null,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/user_achievement.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/user_stat.rb": {
+        "lines": [
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/vote.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/models/watchlist.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
       }
     },
-    "timestamp": 1763515325
+    "timestamp": 1763566170
   },
   "Cucumber Features": {
     "coverage": {

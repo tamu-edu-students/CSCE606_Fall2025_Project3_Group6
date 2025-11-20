@@ -1,49 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= content_for(:title) || "Cinematico" %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <!-- Load Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <!-- Load Tailwind (IMPORTANT) -->
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-
-    <!-- Loads files in app/assets/stylesheets (optional, for your legacy CSS) -->
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-
-    <!-- JavaScript Importmap -->
     <%= javascript_importmap_tags %>
-
-    <%= yield :head %>
   </head>
 
-  <body class="bg-cinematico-black text-white font-inter">
-    <!-- Main content -->
-        <!-- NAVBAR — Glassmorphism -->
-    <nav class="fixed top-0 left-0 w-full z-50 glass-dark px-6 py-4">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <h1 class="font-cinzel text-2xl text-cinematico-gold">CINEMATICO</h1>
+  <body class="bg-[#0A0A0A] text-[#F5F5F5] font-inter min-h-screen flex flex-col">
 
-        <div class="hidden md:flex gap-6 text-cinematico-light font-inter">
-          <%= link_to "Home", root_path, class: "hover:text-cinematico-gold transition" %>
-          <%= link_to "Explore", "#", class: "hover:text-cinematico-gold transition" %>
-          <%= link_to "Sign In", "#", class: "hover:text-cinematico-gold transition" %>
-        </div>
-      </div>
-    </nav>
-    <%= yield %>
+    <%= render "shared/navbar" %>
 
-    <!-- Optional Footer Slot Support -->
-    <!-- FOOTER — Minimal + Glass Line -->
-    <footer class="py-12 text-center text-cinematico-grey text-sm border-t border-[rgba(255,255,255,0.08)] mt-16">
-      <p>© 2025 Cinematico</p>
-      <p class="mt-2 text-xs">Powered by TMDB</p>
-    </footer>
+    <main class="flex-1 pt-24">
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </main>
 
-    <%= yield :footer %>
+    <%= render "shared/footer" %>
+
   </body>
 </html>

@@ -1,0 +1,32 @@
+<nav class="fixed top-0 inset-x-0 z-50 glass-dark py-4">
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-6">
+
+    <%= link_to root_path, class: "text-[#E8C07D] font-cinzel text-2xl tracking-wide" do %>
+      CINEMATICO
+    <% end %>
+
+    <div class="flex items-center gap-6">
+
+      <% if user_signed_in? %>
+        <%= link_to "Profile",
+          public_profile_path(current_user.username),
+          class: "text-[#F5F5F5] hover:text-white font-medium" %>
+
+        <%= button_to "Log Out",
+          destroy_user_session_path,
+          method: :delete,
+          class: "px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-semibold" %>
+
+      <% else %>
+        <%= link_to "Sign In",
+          new_user_session_path,
+          class: "text-[#CCCCCC] hover:text-white font-medium" %>
+
+        <%= link_to "Get Started",
+          new_user_registration_path,
+          class: "px-4 py-2 bg-[#E8C07D] text-black font-semibold rounded-md hover:opacity-90 transition" %>
+      <% end %>
+
+    </div>
+  </div>
+</nav>

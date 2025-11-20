@@ -1,0 +1,19 @@
+<div class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-96 space-y-3"
+     aria-live="assertive" aria-atomic="true">
+
+  <% flash.each do |type, message| %>
+    <% bg =
+      case type.to_sym
+      when :notice, :success then "bg-green-600"
+      when :alert, :error     then "bg-red-600"
+      else                         "bg-blue-600"
+      end
+    %>
+
+    <div class="<%= bg %> text-white px-5 py-4 rounded-lg shadow-xl font-medium"
+         role="alert">
+      <%= message %>
+    </div>
+  <% end %>
+
+</div>

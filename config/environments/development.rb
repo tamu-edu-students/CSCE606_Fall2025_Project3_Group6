@@ -41,9 +41,6 @@ Rails.application.configure do
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
 
-  # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
@@ -76,4 +73,22 @@ Rails.application.configure do
   config.cache_store = :redis_cache_store, {
     url: "redis://localhost:6379/1"
   }
+
+  config.action_mailer.default_url_options = {
+    host: "localhost",
+    port: 3000
+  }
+
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+    address: "smtp.sendgrid.net",
+    port: 587,
+    domain: "localhost",
+    user_name: "apikey",
+    password: ENV["SENDGRID_API_KEY"],
+    authentication: :plain,
+    enable_starttls_auto: true
+}
+
 end

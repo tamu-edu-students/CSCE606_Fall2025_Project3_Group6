@@ -1,0 +1,31 @@
+<div class="min-h-screen flex justify-center bg-cinematico-black p-6">
+  <div class="glass max-w-3xl w-full p-10">
+
+    <h2 class="font-cinzel text-4xl text-cinematico-gold mb-10 text-center">
+      <%= @user.username %>
+    </h2>
+
+    <div class="text-cinematico-light font-inter text-lg space-y-3">
+      <p><strong class="text-white">Email:</strong> <%= @user.email %></p>
+      <p><strong class="text-white">Profile:</strong> <%= @user.profile_public ? "Public" : "Private" %></p>
+      <p><strong class="text-white">Joined:</strong> <%= @user.created_at.strftime("%B %d, %Y") %></p>
+    </div>
+
+    <% if @stats %>
+      <hr class="my-8 border-[rgba(255,255,255,0.2)]">
+      <h3 class="font-cinzel text-2xl text-cinematico-gold mb-4">Your Stats</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
+        <div><p class="text-3xl font-bold"><%= @stats.total_movies %></p><p class="text-sm">Movies</p></div>
+        <div><p class="text-3xl font-bold"><%= @stats.total_hours %></p><p class="text-sm">Hours</p></div>
+        <div><p class="text-3xl font-bold"><%= @stats.total_reviews %></p><p class="text-sm">Reviews</p></div>
+        <div><p class="text-3xl font-bold"><%= @stats.total_rewatches %></p><p class="text-sm">Rewatches</p></div>
+      </div>
+    <% end %>
+
+    <div class="mt-10 text-center">
+      <%= link_to "Edit Profile", settings_profile_path,
+        class: "px-6 py-3 bg-[rgba(255,255,255,0.1)] text-white rounded-lg hover:bg-[rgba(255,255,255,0.2)] transition" %>
+    </div>
+
+  </div>
+</div>
