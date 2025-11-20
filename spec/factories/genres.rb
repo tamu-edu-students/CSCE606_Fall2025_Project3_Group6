@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :genre do
-    name { "MyString" }
+    name { "Action" }
+    tmdb_id { 28 }
   end
 end

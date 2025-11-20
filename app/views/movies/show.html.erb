@@ -1,0 +1,148 @@
+<div class="min-h-screen pt-20 px-6 pb-12">
+  <div class="max-w-7xl mx-auto">
+    <% if @error %>
+      <div class="text-center py-12">
+        <h1 class="font-cinzel text-3xl text-cinematico-gold mb-4">Movie Not Found</h1>
+        <p class="text-cinematico-grey"><%= @error %></p>
+        <%= link_to "Back to Search", movies_path, class: "mt-4 inline-block px-6 py-2 bg-cinematico-gold text-cinematico-black font-semibold rounded-lg hover:bg-opacity-90 transition" %>
+      </div>
+    <% elsif @movie %>
+      <!-- Movie Header -->
+      <div class="mb-8">
+        <%= link_to "← Back to Search", movies_path, class: "text-cinematico-gold hover:underline mb-4 inline-block" %>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <!-- Poster -->
+        <div class="md:col-span-1">
+          <% if @movie.poster_path %>
+            <%= image_tag @movie.poster_url, 
+                alt: @movie.title, 
+                class: "w-full rounded-lg shadow-lg",
+                onerror: "this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'450\\'%3E%3Crect fill=\\'%23333\\' width=\\'300\\' height=\\'450\\'/%3E%3Ctext fill=\\'%23999\\' font-family=\\'Arial\\' font-size=\\'18\\' x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'%3ENo Poster%3C/text%3E%3C/svg%3E'" %>
+          <% else %>
+            <div class="w-full aspect-[2/3] bg-cinematico-grey rounded-lg flex items-center justify-center">
+              <span class="text-cinematico-dark">No Poster Available</span>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Movie Info -->
+        <div class="md:col-span-2">
+          <h1 class="font-cinzel text-4xl text-cinematico-gold mb-4"><%= @movie.title %></h1>
+          
+          <div class="flex flex-wrap gap-4 mb-4 text-cinematico-grey">
+            <% if @movie.release_date %>
+              <span><%= @movie.release_date.year %></span>
+            <% end %>
+            <% if @movie.runtime %>
+              <span><%= @movie.runtime %> min</span>
+            <% end %>
+            <% if @movie.genres.any? %>
+              <div class="flex flex-wrap gap-2">
+                <% @movie.genres.each do |genre| %>
+                  <span class="px-2 py-1 bg-cinematico-dark rounded text-sm"><%= genre.name %></span>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+          <% if @movie.overview.present? %>
+            <div class="mb-6">
+              <h2 class="font-semibold text-xl mb-2">Overview</h2>
+              <p class="text-cinematico-light leading-relaxed"><%= @movie.overview %></p>
+            </div>
+          <% else %>
+            <div class="mb-6">
+              <p class="text-cinematico-grey italic">No overview available.</p>
+            </div>
+          <% end %>
+
+          <!-- Cast -->
+          <% if @movie.movie_people.where(role: "cast").any? %>
+            <div class="mb-6">
+              <h2 class="font-semibold text-xl mb-3">Cast</h2>
+              <div class="flex flex-wrap gap-4">
+                <% @movie.movie_people.where(role: "cast").limit(10).each do |mp| %>
+                  <div class="text-center">
+                    <% if mp.person.profile_path %>
+                      <%= image_tag mp.person.profile_url, 
+                          alt: mp.person.name, 
+                          class: "w-20 h-20 rounded-full object-cover mb-2",
+                          onerror: "this.style.display='none'" %>
+                    <% end %>
+                    <p class="text-sm text-cinematico-light"><%= mp.person.name %></p>
+                    <% if mp.character.present? %>
+                      <p class="text-xs text-cinematico-grey"><%= mp.character %></p>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- Directors -->
+          <% directors = @movie.movie_people.where(role: "director") %>
+          <% if directors.any? %>
+            <div>
+              <h2 class="font-semibold text-xl mb-3">Directors</h2>
+              <div class="flex flex-wrap gap-4">
+                <% directors.each do |mp| %>
+                  <span class="text-cinematico-light"><%= mp.person.name %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Similar Movies Section -->
+      <div class="mt-12">
+        <h2 class="font-cinzel text-3xl text-cinematico-gold mb-6">Similar Movies</h2>
+        
+        <% if @similar_movies.is_a?(Hash) && @similar_movies["error"] %>
+          <div class="text-center py-8 bg-cinematico-dark rounded-lg border border-cinematico-grey">
+            <p class="text-cinematico-grey"><%= @similar_movies["error"] %></p>
+          </div>
+        <% elsif @similar_movies.empty? %>
+          <div class="text-center py-8 bg-cinematico-dark rounded-lg border border-cinematico-grey">
+            <p class="text-cinematico-grey">No similar movies available at this time.</p>
+          </div>
+        <% else %>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <% @similar_movies.each do |movie| %>
+              <div class="group cursor-pointer" onclick="window.location.href='<%= movie_path(movie['id']) %>'">
+                <div class="relative overflow-hidden rounded-lg bg-cinematico-dark border border-cinematico-grey hover:border-cinematico-gold transition-all duration-300">
+                  <% if movie["poster_path"] %>
+                    <%= image_tag TmdbService.poster_url(movie["poster_path"]), 
+                        alt: movie["title"], 
+                        class: "w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300",
+                        onerror: "this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'450\\'%3E%3Crect fill=\\'%23333\\' width=\\'300\\' height=\\'450\\'/%3E%3Ctext fill=\\'%23999\\' font-family=\\'Arial\\' font-size=\\'18\\' x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'%3ENo Poster%3C/text%3E%3C/svg%3E'" %>
+                  <% else %>
+                    <div class="w-full aspect-[2/3] bg-cinematico-grey flex items-center justify-center">
+                      <span class="text-cinematico-dark text-xs">No Poster</span>
+                    </div>
+                  <% end %>
+                  
+                  <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cinematico-black to-transparent p-3">
+                    <h3 class="font-semibold text-white text-sm mb-1 line-clamp-2"><%= movie["title"] %></h3>
+                    <% if movie["release_date"] %>
+                      <p class="text-cinematico-grey text-xs">
+                        <% begin %>
+                          <%= Date.parse(movie["release_date"]).year %>
+                        <% rescue ArgumentError, TypeError %>
+                          N/A
+                        <% end %>
+                      </p>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+

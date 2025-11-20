@@ -33,7 +33,48 @@
         ],
         "branches": {}
       },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/jobs/application_job.rb": {
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/movie_person.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/person.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          6,
+          6,
+          6,
+          null,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/controllers/home_controller.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/jobs/application_job.rb": {
         "lines": [
           0,
           null,
@@ -45,7 +86,125 @@
         ],
         "branches": {}
       },
-      "/home/saswat/csce606/CSCE606_Fall2025_Project3_Group6/app/mailers/application_mailer.rb": {
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/mailers/application_mailer.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/achievement.rb": {
+        "lines": [
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/email_preference.rb": {
+        "lines": [
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/follow.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/list.rb": {
+        "lines": [
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/list_item.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/log.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/log_tag.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/notification.rb": {
+        "lines": [
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/review.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/tag.rb": {
+        "lines": [
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/user_achievement.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/user_stat.rb": {
+        "lines": [
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/vote.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/felix/Documents/606/project3/CSCE606_Fall2025_Project3_Group6/app/models/watchlist.rb": {
         "lines": [
           0,
           0,

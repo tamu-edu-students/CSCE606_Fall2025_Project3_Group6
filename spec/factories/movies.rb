@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :movie do
-    tmdb_id { 1 }
+    sequence(:tmdb_id) { |n| n }
     title { "MyString" }
     overview { "MyText" }
     poster_path { "MyString" }

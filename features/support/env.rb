@@ -6,6 +6,7 @@
 
 
 require 'cucumber/rails'
+require 'webmock/cucumber'
 require "simplecov"
 SimpleCov.start "rails" do
   enable_coverage :branch

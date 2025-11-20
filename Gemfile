@@ -65,6 +65,9 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "faker"
   gem "dotenv-rails"
+  gem "webmock"
+  gem "shoulda-matchers"
+  gem "rails-controller-testing"
 end
 
 group :test do
@@ -79,3 +82,5 @@ end
 
 gem "devise"
 gem "redis"
+gem "faraday"
+gem "faraday-http-cache"
