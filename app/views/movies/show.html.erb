@@ -31,7 +31,7 @@
         <div class="md:col-span-2">
           <h1 class="font-cinzel text-4xl text-cinematico-gold mb-4"><%= @movie.title %></h1>
           
-          <div class="flex flex-wrap gap-4 mb-4 text-cinematico-grey">
+          <div class="flex flex-wrap gap-4 mb-4 text-gray-300">
             <% if @movie.release_date %>
               <span><%= @movie.release_date.year %></span>
             <% end %>
@@ -71,9 +71,9 @@
                           class: "w-20 h-20 rounded-full object-cover mb-2",
                           onerror: "this.style.display='none'" %>
                     <% end %>
-                    <p class="text-sm text-cinematico-light"><%= mp.person.name %></p>
+                    <p class="text-sm text-white"><%= mp.person.name %></p>
                     <% if mp.character.present? %>
-                      <p class="text-xs text-cinematico-grey"><%= mp.character %></p>
+                      <p class="text-xs text-gray-300"><%= mp.character %></p>
                     <% end %>
                   </div>
                 <% end %>
@@ -84,11 +84,11 @@
           <!-- Directors -->
           <% directors = @movie.movie_people.where(role: "director") %>
           <% if directors.any? %>
-            <div>
+            <div class="mt-6">
               <h2 class="font-semibold text-xl mb-3">Directors</h2>
               <div class="flex flex-wrap gap-4">
                 <% directors.each do |mp| %>
-                  <span class="text-cinematico-light"><%= mp.person.name %></span>
+                  <span class="text-white"><%= mp.person.name %></span>
                 <% end %>
               </div>
             </div>
@@ -100,22 +100,22 @@
           <h2 class="font-cinzel text-3xl text-cinematico-gold">Reviews</h2>
           
           <div class="flex gap-4 text-sm mt-4 md:mt-0">
-            <%= link_to "Top Rated", movie_path(@movie, sort: 'top'), class: "px-4 py-2 rounded border #{params[:sort] != 'newest' ? 'border-cinematico-gold text-cinematico-gold bg-cinematico-gold/10' : 'border-gray-700 text-cinematico-grey hover:border-cinematico-gold transition'}" %>
-            <%= link_to "Newest", movie_path(@movie, sort: 'newest'), class: "px-4 py-2 rounded border #{params[:sort] == 'newest' ? 'border-cinematico-gold text-cinematico-gold bg-cinematico-gold/10' : 'border-gray-700 text-cinematico-grey hover:border-cinematico-gold transition'}" %>
+            <%= link_to "Top Rated", movie_path(@movie, sort: 'top'), class: "px-4 py-2 rounded border #{params[:sort] != 'newest' ? 'border-cinematico-gold text-cinematico-gold bg-cinematico-gold/10' : 'border-gray-700 text-gray-200 hover:border-cinematico-gold transition'}" %>
+            <%= link_to "Newest", movie_path(@movie, sort: 'newest'), class: "px-4 py-2 rounded border #{params[:sort] == 'newest' ? 'border-cinematico-gold text-cinematico-gold bg-cinematico-gold/10' : 'border-gray-700 text-gray-200 hover:border-cinematico-gold transition'}" %>
           </div>
         </div>
 
         <% if user_signed_in? %>
           <div class="bg-cinematico-dark border border-gray-800 p-6 rounded-lg mb-10 shadow-lg">
-            <h3 class="text-xl font-cinzel text-cinematico-light mb-4">Leave a Review</h3>
+            <h3 class="text-xl font-cinzel text-white mb-4">Leave a Review</h3>
             <%= form_with(model: [@movie, @review], local: true, class: "space-y-4") do |f| %>
               <div>
-                <%= f.label :rating, "Rating (1-10)", class: "block text-sm font-medium text-cinematico-grey mb-1" %>
+                <%= f.label :rating, "Rating (1-10)", class: "block text-sm font-medium text-gray-200 mb-1" %>
                 <%= f.number_field :rating, in: 1..10, class: "w-full md:w-32 bg-cinematico-black border border-gray-700 rounded text-white focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold px-3 py-2" %>
               </div>
               <div>
-                <%= f.label :body, "Your Thoughts", class: "block text-sm font-medium text-cinematico-grey mb-1" %>
-                <%= f.text_area :body, rows: 3, placeholder: "What did you think of this movie?", class: "w-full bg-cinematico-black border border-gray-700 rounded text-white focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold px-3 py-2" %>
+                <%= f.label :body, "Your Thoughts", class: "block text-sm font-medium text-gray-200 mb-1" %>
+                <%= f.text_area :body, rows: 3, placeholder: "What did you think of this movie?", class: "w-full bg-cinematico-black border border-gray-700 rounded text-white placeholder-gray-400 focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold px-3 py-2" %>
               </div>
               <%= f.submit "Post Review", class: "cursor-pointer px-6 py-2 bg-cinematico-gold text-cinematico-black font-bold rounded hover:bg-yellow-500 transition" %>
             <% end %>

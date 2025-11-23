@@ -1,31 +1,101 @@
-<div class="min-h-screen flex justify-center bg-cinematico-black p-6">
-  <div class="glass max-w-3xl w-full p-10">
+<div class="min-h-screen bg-cinematico-black pt-24 px-6 pb-12">
+  <div class="max-w-5xl mx-auto space-y-10">
 
-    <h2 class="font-cinzel text-4xl text-cinematico-gold mb-10 text-center">
-      <%= @user.username %>
-    </h2>
+    <!-- Profile header + stats -->
+    <div class="glass p-8 md:p-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
 
-    <div class="text-cinematico-light font-inter text-lg space-y-3">
-      <p><strong class="text-white">Email:</strong> <%= @user.email %></p>
-      <p><strong class="text-white">Profile:</strong> <%= @user.profile_public ? "Public" : "Private" %></p>
-      <p><strong class="text-white">Joined:</strong> <%= @user.created_at.strftime("%B %d, %Y") %></p>
+        <!-- Identity column -->
+        <div class="flex flex-col items-center md:items-start gap-4">
+          <div class="h-20 w-20 rounded-full bg-cinematico-gold text-cinematico-black flex items-center justify-center text-3xl font-bold">
+            <%= @user.username.to_s.first&.upcase || "U" %>
+          </div>
+
+          <div class="text-center md:text-left">
+            <h1 class="font-cinzel text-3xl text-white mb-1"><%= @user.username %></h1>
+            <p class="text-sm text-gray-300"><%= @user.email %></p>
+          </div>
+
+          <div class="flex flex-wrap gap-3 text-xs text-gray-300 mt-2">
+            <span class="px-3 py-1 rounded-full border border-gray-700 bg-black/40">
+              <strong class="font-semibold">Profile:</strong>
+              <%= @user.profile_public ? "Public" : "Private" %>
+            </span>
+            <span class="px-3 py-1 rounded-full border border-gray-700 bg-black/40">
+              Joined <%= @user.created_at.strftime("%b %e, %Y") %>
+            </span>
+          </div>
+
+          <div class="flex flex-wrap gap-3 mt-4">
+            <%= link_to "Edit Profile", settings_profile_path,
+              class: "px-4 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded-lg hover:bg-opacity-90 transition" %>
+            <%= link_to "My Reviews", my_reviews_path,
+              class: "px-4 py-2 border border-gray-700 text-gray-200 text-sm rounded-lg hover:border-cinematico-gold hover:text-cinematico-gold transition" %>
+          </div>
+        </div>
+
+        <!-- Stats column -->
+        <div class="md:col-span-2">
+          <h2 class="font-cinzel text-xl text-cinematico-gold mb-4">Your Stats</h2>
+
+          <% if @stats %>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-black/40 border border-gray-800 rounded-lg p-4 text-center">
+                <p class="text-2xl md:text-3xl font-bold text-white"><%= @stats.total_movies %></p>
+                <p class="text-xs text-gray-300 mt-1">Movies</p>
+              </div>
+              <div class="bg-black/40 border border-gray-800 rounded-lg p-4 text-center">
+                <p class="text-2xl md:text-3xl font-bold text-white"><%= @stats.total_hours %></p>
+                <p class="text-xs text-gray-300 mt-1">Hours</p>
+              </div>
+              <div class="bg-black/40 border border-gray-800 rounded-lg p-4 text-center">
+                <p class="text-2xl md:text-3xl font-bold text-white"><%= @stats.total_reviews %></p>
+                <p class="text-xs text-gray-300 mt-1">Reviews</p>
+              </div>
+              <div class="bg-black/40 border border-gray-800 rounded-lg p-4 text-center">
+                <p class="text-2xl md:text-3xl font-bold text-white"><%= @stats.total_rewatches %></p>
+                <p class="text-xs text-gray-300 mt-1">Rewatches</p>
+              </div>
+            </div>
+          <% else %>
+            <p class="text-gray-300 text-sm">
+              Start logging movies and writing reviews to see your viewing stats here.
+            </p>
+          <% end %>
+        </div>
+      </div>
     </div>
 
-    <% if @stats %>
-      <hr class="my-8 border-[rgba(255,255,255,0.2)]">
-      <h3 class="font-cinzel text-2xl text-cinematico-gold mb-4">Your Stats</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
-        <div><p class="text-3xl font-bold"><%= @stats.total_movies %></p><p class="text-sm">Movies</p></div>
-        <div><p class="text-3xl font-bold"><%= @stats.total_hours %></p><p class="text-sm">Hours</p></div>
-        <div><p class="text-3xl font-bold"><%= @stats.total_reviews %></p><p class="text-sm">Reviews</p></div>
-        <div><p class="text-3xl font-bold"><%= @stats.total_rewatches %></p><p class="text-sm">Rewatches</p></div>
+    <!-- Recent reviews -->
+    <% if @recent_reviews.present? %>
+      <div class="glass p-8 md:p-10">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-cinzel text-2xl text-cinematico-gold">Recent Reviews</h2>
+          <%= link_to "View all", my_reviews_path, class: "text-gray-300 hover:text-cinematico-gold text-sm" %>
+        </div>
+
+        <div class="space-y-4">
+          <% @recent_reviews.each do |review| %>
+            <div class="bg-cinematico-dark border border-gray-800 rounded-lg p-4">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-white font-semibold text-sm md:text-base">
+                  <%= link_to review.movie.title, movie_path(review.movie), class: "hover:text-cinematico-gold" %>
+                </h3>
+                <span class="px-2 py-0.5 bg-yellow-900/30 text-cinematico-gold text-xs font-bold rounded border border-yellow-900/50">
+                  ★ <%= review.rating %>
+                </span>
+              </div>
+              <p class="text-xs text-gray-400 mb-2">
+                Reviewed on <%= review.created_at.strftime("%B %d, %Y") %>
+              </p>
+              <% if review.body.present? %>
+                <p class="text-sm text-gray-200 line-clamp-3"><%= review.body %></p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
       </div>
     <% end %>
-
-    <div class="mt-10 text-center">
-      <%= link_to "Edit Profile", settings_profile_path,
-        class: "px-6 py-3 bg-[rgba(255,255,255,0.1)] text-white rounded-lg hover:bg-[rgba(255,255,255,0.2)] transition" %>
-    </div>
 
   </div>
 </div>

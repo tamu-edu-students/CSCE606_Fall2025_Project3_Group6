@@ -10,7 +10,11 @@
 
       <% if user_signed_in? %>
         <%= link_to "Profile",
-          public_profile_path(current_user.username),
+          profile_path,
+          class: "text-[#F5F5F5] hover:text-white font-medium" %>
+
+        <%= link_to "My Reviews",
+          my_reviews_path,
           class: "text-[#F5F5F5] hover:text-white font-medium" %>
 
         <%= button_to "Log Out",

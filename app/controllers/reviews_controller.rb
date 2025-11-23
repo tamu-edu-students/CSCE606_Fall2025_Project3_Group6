@@ -64,7 +64,7 @@ class ReviewsController < ApplicationController
   private
 
   def set_movie
-    @movie = Movie.find(params[:movie_id])
+    @movie = Movie.find_by!(tmdb_id: params[:movie_id])
   end
 
   def set_review

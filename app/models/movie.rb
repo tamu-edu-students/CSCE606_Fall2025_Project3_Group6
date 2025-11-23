@@ -11,6 +11,10 @@ class Movie < ApplicationRecord
   scope :cached, -> { where.not(cached_at: nil) }
   scope :recently_cached, -> { where("cached_at > ?", 24.hours.ago) }
 
+  def to_param
+    tmdb_id.to_s
+  end
+
   def self.find_or_create_from_tmdb(tmdb_data)
     return nil if tmdb_data.blank?
 

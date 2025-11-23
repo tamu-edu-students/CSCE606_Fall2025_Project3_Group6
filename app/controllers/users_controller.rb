@@ -1,9 +1,10 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:public_profile]
+  before_action :authenticate_user!
 
   def show
     @user = current_user
     @stats = @user.user_stat if @user.respond_to?(:user_stat)
+    @recent_reviews = @user.reviews.includes(:movie).by_date.limit(5)
   end
 
   def public_profile
