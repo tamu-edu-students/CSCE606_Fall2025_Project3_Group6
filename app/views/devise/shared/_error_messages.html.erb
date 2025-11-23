@@ -1,0 +1,12 @@
+<% if resource&.errors&.any? %>
+  <div class="mb-6 rounded-lg border border-red-500/40 bg-red-900/40 text-red-100 p-4">
+    <div class="font-semibold mb-2">
+      Please correct <%= pluralize(resource.errors.count, "error") %>:
+    </div>
+    <ul class="list-disc list-inside space-y-1">
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

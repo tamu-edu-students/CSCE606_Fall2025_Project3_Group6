@@ -1,9 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe MoviesController, type: :controller do
+  let(:user) { create(:user) }
   let(:tmdb_service) { instance_double(TmdbService) }
 
   before do
+    allow(controller).to receive(:authenticate_user!).and_return(true)
+    allow(controller).to receive(:current_user).and_return(user)
     allow(TmdbService).to receive(:new).and_return(tmdb_service)
   end
 

@@ -11,9 +11,21 @@
       <%= f.label :password, class: "block text-cinematico-light mb-1 mt-6" %>
       <%= f.password_field :password, class: "w-full px-4 py-3 rounded-lg glass-thin text-white" %>
 
+      <% if devise_mapping.rememberable? %>
+        <div class="mt-4 flex items-center gap-2 text-sm text-gray-300">
+          <%= f.check_box :remember_me, class: "h-4 w-4 rounded border-white/30 bg-black/40" %>
+          <%= f.label :remember_me, "Keep me logged in", class: "select-none" %>
+        </div>
+      <% end %>
+
       <%= f.submit "Sign In",
             class: "mt-8 w-full py-3 bg-cinematico-gold text-black font-semibold rounded-lg hover:opacity-90 transition" %>
 
     <% end %>
+
+    <div class="mt-6 text-center">
+      <%= link_to "Forgot your password?", new_password_path(resource_name),
+                  class: "text-cinematico-gold hover:opacity-80 font-medium" %>
+    </div>
   </div>
 </div>

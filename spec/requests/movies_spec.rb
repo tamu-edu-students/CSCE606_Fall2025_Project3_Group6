@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Movies", type: :request do
+  let(:user) { create(:user) }
   let(:tmdb_service) { instance_double(TmdbService) }
 
   before do
+    sign_in user
     allow(TmdbService).to receive(:new).and_return(tmdb_service)
   end
 

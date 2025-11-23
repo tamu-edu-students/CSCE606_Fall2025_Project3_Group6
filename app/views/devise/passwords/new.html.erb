@@ -1,0 +1,28 @@
+<div class="min-h-screen flex items-center justify-center p-6 bg-cinematico-black">
+  <div class="glass-dark max-w-md w-full p-10">
+
+    <h2 class="text-3xl font-cinzel text-center text-cinematico-gold mb-6">
+      Forgot your password?
+    </h2>
+    <p class="text-gray-300 text-sm text-center mb-6">
+      Enter the email you used to sign up and we’ll send you reset instructions.
+    </p>
+
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name)) do |f| %>
+
+      <%= f.label :email, class: "block text-cinematico-light mb-1" %>
+      <%= f.email_field :email, autofocus: true, class: "w-full px-4 py-3 rounded-lg glass-thin text-white" %>
+
+      <%= f.submit "Send reset link",
+            class: "mt-8 w-full py-3 bg-cinematico-gold text-black font-semibold rounded-lg hover:opacity-90 transition" %>
+    <% end %>
+
+    <p class="mt-6 text-center">
+      <%= link_to "Back to sign in", new_session_path(resource_name),
+                  class: "text-cinematico-gold hover:opacity-80 font-medium" %>
+    </p>
+
+  </div>
+</div>

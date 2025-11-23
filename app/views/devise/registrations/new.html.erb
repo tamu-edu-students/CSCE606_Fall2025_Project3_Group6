@@ -5,6 +5,8 @@
       Create Your Account
     </h2>
 
+    <%= render "devise/shared/error_messages", resource: resource %>
+
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
 
       <%= f.label :username, class: "block text-cinematico-light mb-1" %>

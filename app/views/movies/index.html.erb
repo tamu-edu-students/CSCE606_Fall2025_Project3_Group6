@@ -7,6 +7,7 @@
       <%= form_with url: movies_path, method: :get, local: true, class: "mb-6" do |f| %>
         <div class="flex gap-4 flex-wrap">
           <div class="flex-1 min-w-[300px]">
+            <%= f.label :query, "Search for a movie", class: "block text-cinematico-light mb-1" %>
             <%= f.text_field :query, 
                 value: @query, 
                 placeholder: "Search for a movie...", 
@@ -18,6 +19,7 @@
         <!-- Filters -->
         <div class="mt-4 flex gap-4 flex-wrap">
           <div class="min-w-[200px]">
+            <%= f.label :genre, "Filter by genre", class: "block text-cinematico-light mb-1" %>
             <%= f.select :genre, 
                 options_for_select([["All Genres", ""]] + (@genres.map { |g| [g["name"], g["id"]] } || []), @genre_filter),
                 {},
@@ -25,6 +27,7 @@
           </div>
           
           <div class="min-w-[200px]">
+            <%= f.label :decade, "Filter by decade", class: "block text-cinematico-light mb-1" %>
             <%= f.select :decade,
                 options_for_select([
                   ["All Decades", ""],
@@ -44,6 +47,7 @@
           </div>
 
           <div class="min-w-[200px]">
+            <%= f.label :sort_by, "Sort results", class: "block text-cinematico-light mb-1" %>
             <%= f.select :sort_by,
                 options_for_select([
                   ["Sort by Popularity", "popularity"],
@@ -86,7 +90,7 @@
       <!-- Movie Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         <% @movies.each do |movie| %>
-          <div class="group cursor-pointer" onclick="window.location.href='<%= movie_path(movie['id']) %>'">
+          <%= link_to movie_path(movie["id"]), class: "group block focus:outline-none focus-visible:ring-2 focus-visible:ring-cinematico-gold rounded-lg" do %>
             <div class="relative overflow-hidden rounded-lg bg-cinematico-dark border border-cinematico-grey hover:border-cinematico-gold transition-all duration-300">
               <% if movie["poster_path"] %>
                 <%= image_tag TmdbService.poster_url(movie["poster_path"]), 
@@ -118,7 +122,7 @@
                 <% end %>
               </div>
             </div>
-          </div>
+          <% end %>
         <% end %>
       </div>
 
@@ -143,4 +147,3 @@
     <% end %>
   </div>
 </div>
-

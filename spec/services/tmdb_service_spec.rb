@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe TmdbService do
   let(:service) { described_class.new }
-  let(:api_key) { "test_api_key" }
+  let(:access_token) { "test_access_token" }
   let(:base_url) { "https://api.themoviedb.org/3" }
 
   before do
-    allow(ENV).to receive(:fetch).with("TMDB_API_KEY", "").and_return(api_key)
+    allow(ENV).to receive(:fetch).with("TMDB_ACCESS_TOKEN", "").and_return(access_token)
     Rails.cache.clear
   end
 

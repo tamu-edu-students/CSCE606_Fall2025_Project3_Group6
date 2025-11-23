@@ -111,7 +111,7 @@
         <% else %>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             <% @similar_movies.each do |movie| %>
-              <div class="group cursor-pointer" onclick="window.location.href='<%= movie_path(movie['id']) %>'">
+              <%= link_to movie_path(movie["id"]), class: "group block focus:outline-none focus-visible:ring-2 focus-visible:ring-cinematico-gold rounded-lg" do %>
                 <div class="relative overflow-hidden rounded-lg bg-cinematico-dark border border-cinematico-grey hover:border-cinematico-gold transition-all duration-300">
                   <% if movie["poster_path"] %>
                     <%= image_tag TmdbService.poster_url(movie["poster_path"]), 
@@ -137,7 +137,7 @@
                     <% end %>
                   </div>
                 </div>
-              </div>
+              <% end %>
             <% end %>
           </div>
         <% end %>
@@ -145,4 +145,3 @@
     <% end %>
   </div>
 </div>
-

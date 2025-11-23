@@ -5,6 +5,16 @@ class ApplicationController < ActionController::Base
 
   protected
 
+    # Send users to the movies listing after sign in/sign up to drop them
+    # straight into the core experience.
+    def after_sign_in_path_for(_resource)
+      movies_path
+    end
+
+    def after_sign_out_path_for(_resource_or_scope)
+      root_path
+    end
+
     def configure_permitted_parameters
       devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
       devise_parameter_sanitizer.permit(:account_update, keys: [:username])

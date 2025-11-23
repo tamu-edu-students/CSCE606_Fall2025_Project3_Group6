@@ -4,22 +4,25 @@ class MoviesController < ApplicationController
   def index
     @query = params[:query]&.strip
     @page = params[:page]&.to_i || 1
-    @genre_filter = params[:genre]&.to_i
-    @decade_filter = params[:decade]&.to_i
+    @genre_filter = params[:genre].presence&.to_i
+    @decade_filter = params[:decade].presence&.to_i
     @sort_by = params[:sort_by] || "popularity"
 
     if @query.present?
       search_results = @tmdb_service.search_movies(@query, page: @page)
 
-      if search_results["error"]
-        @error = search_results["error"]
+      error_message = search_results["error"] || search_results[:error]
+
+      if error_message
+        @error = error_message
         @movies = []
         @total_pages = 0
         @total_results = 0
       else
-        @movies = search_results["results"] || []
-        @total_pages = search_results["total_pages"] || 0
-        @total_results = search_results["total_results"] || 0
+        results = search_results["results"] || search_results[:results] || []
+        @movies = results
+        @total_pages = search_results["total_pages"] || search_results[:total_pages] || 0
+        @total_results = search_results["total_results"] || search_results[:total_results] || 0
 
         # Apply filters
         @movies = apply_filters(@movies)
