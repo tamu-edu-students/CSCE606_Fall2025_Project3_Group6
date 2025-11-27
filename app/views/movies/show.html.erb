@@ -29,7 +29,27 @@
 
         <!-- Movie Info -->
         <div class="md:col-span-2">
-          <h1 class="font-cinzel text-4xl text-cinematico-gold mb-4"><%= @movie.title %></h1>
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h1 class="font-cinzel text-4xl text-cinematico-gold"><%= @movie.title %></h1>
+              <% if user_signed_in? %>
+                <%# display how many times current user has logged this movie below the title %>
+                <% watch_count = current_user.watch_history&.watch_logs&.where(movie_id: @movie.id)&.count || 0 %>
+                <div class="mt-1 text-sm text-cinematico-light">Watch count: <strong class="text-white"><%= watch_count %></strong></div>
+              <% end %>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <% if user_signed_in? %>
+                <% watchlist_item = current_user.watchlist&.watchlist_items&.find_by(movie_id: @movie.id) %>
+                <% if watchlist_item %>
+                  <%= button_to "Remove from watchlist", watchlist_item_path(watchlist_item), method: :delete, class: "px-3 py-1 bg-red-600 text-white rounded hover:opacity-90 text-sm" %>
+                <% else %>
+                  <%= button_to "Add to Watchlist", watchlist_items_path, params: { movie_id: @movie.id }, method: :post, class: "px-3 py-1 bg-cinematico-gold text-cinematico-black rounded hover:opacity-90 text-sm" %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
           
           <div class="flex flex-wrap gap-4 mb-4 text-gray-300">
             <% if @movie.release_date %>
@@ -106,19 +126,33 @@
         </div>
 
         <% if user_signed_in? %>
-          <div class="bg-cinematico-dark border border-gray-800 p-6 rounded-lg mb-10 shadow-lg">
-            <h3 class="text-xl font-cinzel text-white mb-4">Leave a Review</h3>
-            <%= form_with(model: [@movie, @review], local: true, class: "space-y-4") do |f| %>
-              <div>
-                <%= f.label :rating, "Rating (1-10)", class: "block text-sm font-medium text-gray-200 mb-1" %>
-                <%= f.number_field :rating, in: 1..10, class: "w-full md:w-32 bg-cinematico-black border border-gray-700 rounded text-white focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold px-3 py-2" %>
-              </div>
-              <div>
-                <%= f.label :body, "Your Thoughts", class: "block text-sm font-medium text-gray-200 mb-1" %>
-                <%= f.text_area :body, rows: 3, placeholder: "What did you think of this movie?", class: "w-full bg-cinematico-black border border-gray-700 rounded text-white placeholder-gray-400 focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold px-3 py-2" %>
-              </div>
-              <%= f.submit "Post Review", class: "cursor-pointer px-6 py-2 bg-cinematico-gold text-cinematico-black font-bold rounded hover:bg-yellow-500 transition" %>
-            <% end %>
+          <div class="flex flex-col gap-6 mb-6">
+            <div class="bg-cinematico-dark border border-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-semibold text-white mb-3">Log as Watched</h3>
+              <%= form_with url: watch_histories_path, local: true do |f| %>
+                <%= hidden_field_tag :movie_id, @movie.id %>
+                <div class="mb-3">
+                  <%= label_tag :watched_on, "Watched On", class: "block text-sm text-cinematico-grey mb-1" %>
+                  <%= date_field_tag :watched_on, Date.current, class: "w-full bg-cinematico-black border border-gray-700 rounded text-white px-3 py-2" %>
+                </div>
+                <%= f.submit "Log as Watched", class: "px-4 py-2 bg-cinematico-gold text-cinematico-black rounded font-semibold" %>
+              <% end %>
+            </div>
+
+            <div class="bg-cinematico-dark border border-gray-800 p-6 rounded-lg mb-10 shadow-lg">
+              <h3 class="text-xl font-cinzel text-white mb-4">Leave a Review</h3>
+              <%= form_with(model: [@movie, @review], local: true, class: "space-y-4") do |f| %>
+                <div>
+                  <%= f.label :rating, "Rating (1-10)", class: "block text-sm font-medium text-gray-200 mb-1" %>
+                  <%= f.number_field :rating, in: 1..10, class: "w-full md:w-32 bg-cinematico-black border border-gray-700 rounded text-white focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold px-3 py-2" %>
+                </div>
+                <div>
+                  <%= f.label :body, "Your Thoughts", class: "block text-sm font-medium text-gray-200 mb-1" %>
+                  <%= f.text_area :body, rows: 3, placeholder: "What did you think of this movie?", class: "w-full bg-cinematico-black border border-gray-700 rounded text-white placeholder-gray-400 focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold px-3 py-2" %>
+                </div>
+                <%= f.submit "Post Review", class: "cursor-pointer px-6 py-2 bg-cinematico-gold text-cinematico-black font-bold rounded hover:bg-yellow-500 transition" %>
+              <% end %>
+            </div>
           </div>
         <% else %>
           <div class="bg-cinematico-dark border border-gray-800 p-6 rounded-lg mb-10 text-center">
@@ -150,33 +184,44 @@
         <% else %>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             <% @similar_movies.each do |movie| %>
-              <%= link_to movie_path(movie["id"]), class: "group block focus:outline-none focus-visible:ring-2 focus-visible:ring-cinematico-gold rounded-lg" do %>
-                <div class="relative overflow-hidden rounded-lg bg-cinematico-dark border border-cinematico-grey hover:border-cinematico-gold transition-all duration-300">
-                  <% if movie["poster_path"] %>
-                    <%= image_tag TmdbService.poster_url(movie["poster_path"]), 
-                        alt: movie["title"], 
-                        class: "w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300",
-                        onerror: "this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'450\\'%3E%3Crect fill=\\'%23333\\' width=\\'300\\' height=\\'450\\'/%3E%3Ctext fill=\\'%23999\\' font-family=\\'Arial\\' font-size=\\'18\\' x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'%3ENo Poster%3C/text%3E%3C/svg%3E'" %>
-                  <% else %>
-                    <div class="w-full aspect-[2/3] bg-cinematico-grey flex items-center justify-center">
-                      <span class="text-cinematico-dark text-xs">No Poster</span>
+              <div class="group relative">
+                <%= link_to movie_path(movie['id']), class: 'group block focus:outline-none focus-visible:ring-2 focus-visible:ring-cinematico-gold rounded-lg' do %>
+                  <div class="relative overflow-hidden rounded-lg bg-cinematico-dark border border-cinematico-grey hover:border-cinematico-gold transition-all duration-300">
+                    <% if movie['poster_path'] %>
+                      <%= image_tag TmdbService.poster_url(movie['poster_path']),
+                          alt: movie['title'],
+                          class: 'w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300',
+                          onerror: "this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'450\'%3E%3Crect fill=\'%23333\' width=\'300\' height=\'450\'/%3E%3Ctext fill=\'%23999\' font-family=\'Arial\' font-size=\'18\' x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3ENo Poster%3C/text%3E%3C/svg%3E'" %>
+                    <% else %>
+                      <div class="w-full aspect-[2/3] bg-cinematico-grey flex items-center justify-center">
+                        <span class="text-cinematico-dark text-xs">No Poster</span>
+                      </div>
+                    <% end %>
+
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cinematico-black to-transparent p-3">
+                      <h3 class="font-semibold text-white text-sm mb-1 line-clamp-2"><%= movie['title'] %></h3>
+                      <% if movie['release_date'] %>
+                        <p class="text-cinematico-grey text-xs">
+                          <% begin %>
+                            <%= Date.parse(movie['release_date']).year %>
+                          <% rescue ArgumentError, TypeError %>
+                            N/A
+                          <% end %>
+                        </p>
+                      <% end %>
                     </div>
-                  <% end %>
-                  
-                  <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cinematico-black to-transparent p-3">
-                    <h3 class="font-semibold text-white text-sm mb-1 line-clamp-2"><%= movie["title"] %></h3>
-                    <% if movie["release_date"] %>
-                      <p class="text-cinematico-grey text-xs">
-                        <% begin %>
-                          <%= Date.parse(movie["release_date"]).year %>
-                        <% rescue ArgumentError, TypeError %>
-                          N/A
-                        <% end %>
-                      </p>
+                  </div>
+                <% end %>
+
+                <% if user_signed_in? %>
+                  <div class="absolute top-2 right-2">
+                    <%= form_with url: watchlist_items_path, method: :post, local: true do |f| %>
+                      <%= hidden_field_tag :movie_id, movie['id'] %>
+                      <%= f.submit "+", class: "w-8 h-8 rounded-full bg-cinematico-gold text-cinematico-black font-bold text-sm shadow-md hover:opacity-90" %>
                     <% end %>
                   </div>
-                </div>
-              <% end %>
+                <% end %>
+              </div>
             <% end %>
           </div>
         <% end %>

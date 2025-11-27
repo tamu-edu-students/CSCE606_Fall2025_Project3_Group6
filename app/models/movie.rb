@@ -5,6 +5,7 @@ class Movie < ApplicationRecord
   has_many :people, through: :movie_people
   has_many :reviews, dependent: :destroy
   has_many :logs, dependent: :destroy
+  has_many :watch_logs, dependent: :destroy
 
   validates :tmdb_id, presence: true, uniqueness: true
 

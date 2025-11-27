@@ -1,0 +1,41 @@
+<div class="min-h-screen pt-24 px-6 pb-12">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="font-cinzel text-4xl text-cinematico-gold mb-6">My Watchlist</h1>
+
+    <% if @items.any? %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        <% @items.each do |item| %>
+          <% movie = item.movie %>
+          <div class="group relative">
+            <%= link_to movie_path(movie.tmdb_id), class: 'block' do %>
+              <div class="relative overflow-hidden rounded-lg bg-cinematico-dark border border-cinematico-grey hover:border-cinematico-gold transition-all duration-300">
+                <% if movie.poster_path %>
+                  <%= image_tag movie.poster_url, alt: movie.title, class: "w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300" %>
+                <% else %>
+                  <div class="w-full aspect-[2/3] bg-cinematico-grey flex items-center justify-center">
+                    <span class="text-cinematico-dark">No Poster</span>
+                  </div>
+                <% end %>
+
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cinematico-black to-transparent p-3">
+                  <h3 class="font-semibold text-white text-sm mb-1 line-clamp-2"><%= movie.title %></h3>
+                  <% if movie.release_date %>
+                    <p class="text-cinematico-grey text-xs"><%= movie.release_year || 'N/A' %></p>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+
+            <div class="absolute top-2 right-2">
+              <%= button_to "x", watchlist_item_path(item), method: :delete, form: { data: { turbo: false } }, class: "w-8 h-8 rounded-full bg-red-600 text-white font-bold text-sm shadow-md hover:opacity-90" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-cinematico-dark border border-gray-800 p-6 rounded-lg">
+        <p class="text-cinematico-grey">Your watchlist is empty. Add movies from the search results.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

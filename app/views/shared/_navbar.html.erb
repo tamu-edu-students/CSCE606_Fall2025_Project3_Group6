@@ -16,6 +16,8 @@
         <%= link_to "My Reviews",
           my_reviews_path,
           class: "text-[#F5F5F5] hover:text-white font-medium" %>
+        <%= link_to "Watchlist", watchlist_path, class: "hover:text-cinematico-gold transition" %>
+        <%= link_to "Watch History", watch_histories_path, class: "hover:text-cinematico-gold transition" %>
 
         <%= button_to "Log Out",
           destroy_user_session_path,
