@@ -1,0 +1,342 @@
+<% content_for :title, "Stats Dashboard" %>
+
+<div class="min-h-screen bg-[#0A0A0A] pt-24 px-6 pb-12">
+  <div class="max-w-7xl mx-auto space-y-8">
+
+    <!-- Page Header -->
+    <div class="text-center mb-8">
+      <h1 class="font-cinzel text-4xl md:text-5xl text-[#E8C07D] mb-2">Stats Dashboard</h1>
+      <p class="text-gray-300">Your cinematic journey in numbers</p>
+    </div>
+
+    <!-- Stats Overview Section -->
+    <div class="glass p-8 md:p-10">
+      <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">Overview</h2>
+      
+      <% if @overview[:total_movies] > 0 %>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div class="bg-black/40 border border-gray-800 rounded-lg p-6 text-center">
+            <p class="text-3xl md:text-4xl font-bold text-white mb-1"><%= @overview[:total_movies] %></p>
+            <p class="text-sm text-gray-300">Movies Watched</p>
+          </div>
+          <div class="bg-black/40 border border-gray-800 rounded-lg p-6 text-center">
+            <p class="text-3xl md:text-4xl font-bold text-white mb-1">
+              <%= @overview[:total_hours] && @overview[:total_hours] > 0 ? (@overview[:total_hours] / 60.0).round(1) : 0 %>
+            </p>
+            <p class="text-sm text-gray-300">Hours Watched</p>
+          </div>
+          <div class="bg-black/40 border border-gray-800 rounded-lg p-6 text-center">
+            <p class="text-3xl md:text-4xl font-bold text-white mb-1"><%= @overview[:total_reviews] %></p>
+            <p class="text-sm text-gray-300">Reviews Written</p>
+          </div>
+          <div class="bg-black/40 border border-gray-800 rounded-lg p-6 text-center">
+            <p class="text-3xl md:text-4xl font-bold text-white mb-1"><%= @overview[:total_rewatches] %></p>
+            <p class="text-sm text-gray-300">Rewatches</p>
+          </div>
+        </div>
+
+        <!-- Genre Breakdown -->
+        <% if @overview[:genre_breakdown].present? %>
+          <div class="mt-6">
+            <h3 class="font-semibold text-white mb-4">Genre Breakdown</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              <% @overview[:genre_breakdown].first(12).each do |genre_name, count| %>
+                <div class="bg-black/40 border border-gray-800 rounded-lg p-3 text-center">
+                  <p class="text-lg font-bold text-white"><%= count %></p>
+                  <p class="text-xs text-gray-300"><%= genre_name %></p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="text-center py-12">
+          <p class="text-gray-300 text-lg mb-4">Start logging movies to see your stats!</p>
+          <%= link_to "Browse Movies", movies_path, 
+              class: "px-6 py-2 bg-[#E8C07D] text-black font-semibold rounded-lg hover:opacity-90 transition" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Top Contributors Section -->
+    <% if @overview[:total_movies] > 0 %>
+      <div class="glass p-8 md:p-10">
+        <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">Top Contributors</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Top Genres -->
+          <div>
+            <h3 class="font-semibold text-white mb-4">Top Genres</h3>
+            <% if @top_contributors[:top_genres].present? %>
+              <div class="space-y-2">
+                <% @top_contributors[:top_genres].first(5).each_with_index do |genre, index| %>
+                  <div class="bg-black/40 border border-gray-800 rounded-lg p-3 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="text-[#E8C07D] font-bold"><%= index + 1 %>.</span>
+                      <span class="text-white text-sm"><%= genre[:name] %></span>
+                    </div>
+                    <span class="text-gray-300 text-sm font-semibold"><%= genre[:count] %></span>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-gray-400 text-sm">No genre data available</p>
+            <% end %>
+          </div>
+
+          <!-- Top Directors -->
+          <div>
+            <h3 class="font-semibold text-white mb-4">Top Directors</h3>
+            <% if @top_contributors[:top_directors].present? %>
+              <div class="space-y-2">
+                <% @top_contributors[:top_directors].first(5).each_with_index do |director, index| %>
+                  <div class="bg-black/40 border border-gray-800 rounded-lg p-3 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="text-[#E8C07D] font-bold"><%= index + 1 %>.</span>
+                      <span class="text-white text-sm"><%= director[:name] %></span>
+                    </div>
+                    <span class="text-gray-300 text-sm font-semibold"><%= director[:count] %></span>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-gray-400 text-sm">No director data available</p>
+            <% end %>
+          </div>
+
+          <!-- Top Actors -->
+          <div>
+            <h3 class="font-semibold text-white mb-4">Top Actors</h3>
+            <% if @top_contributors[:top_actors].present? %>
+              <div class="space-y-2">
+                <% @top_contributors[:top_actors].first(5).each_with_index do |actor, index| %>
+                  <div class="bg-black/40 border border-gray-800 rounded-lg p-3 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="text-[#E8C07D] font-bold"><%= index + 1 %>.</span>
+                      <span class="text-white text-sm"><%= actor[:name] %></span>
+                    </div>
+                    <span class="text-gray-300 text-sm font-semibold"><%= actor[:count] %></span>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-gray-400 text-sm">No actor data available</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trend Charts Section -->
+      <div class="glass p-8 md:p-10">
+        <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">Trends</h2>
+        
+        <% if @trend_data[:activity_trend].length > 0 || @trend_data[:rating_trend].length > 0 %>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Activity Trend Chart -->
+            <div>
+              <h3 class="font-semibold text-white mb-4">Watching Activity Over Time</h3>
+              <div class="bg-black/40 border border-gray-800 rounded-lg p-4">
+                <canvas id="activityChart" height="250"></canvas>
+              </div>
+            </div>
+
+            <!-- Rating Trend Chart -->
+            <div>
+              <h3 class="font-semibold text-white mb-4">Average Rating Over Time</h3>
+              <div class="bg-black/40 border border-gray-800 rounded-lg p-4">
+                <canvas id="ratingChart" height="250"></canvas>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <p class="text-gray-400 text-center py-8">Not enough data to display trends. Keep logging movies!</p>
+        <% end %>
+      </div>
+
+      <!-- Heatmap Activity Section -->
+      <div class="glass p-8 md:p-10">
+        <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">Activity Heatmap</h2>
+        
+        <% if @heatmap_data.present? && @heatmap_data.values.any? { |v| v > 0 } %>
+          <div class="bg-black/40 border border-gray-800 rounded-lg p-6 overflow-x-auto">
+            <div id="heatmap" class="heatmap-container"></div>
+          </div>
+        <% else %>
+          <p class="text-gray-400 text-center py-8">No activity data to display. Start logging movies with dates!</p>
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+  // Activity Trend Chart
+  <% if @trend_data[:activity_trend].length > 0 %>
+    const activityCtx = document.getElementById('activityChart');
+    if (activityCtx) {
+      const activityData = <%= @trend_data[:activity_trend].to_json.html_safe %>;
+      new Chart(activityCtx, {
+        type: 'line',
+        data: {
+          labels: activityData.map(item => item.month),
+          datasets: [{
+            label: 'Movies Watched',
+            data: activityData.map(item => item.count),
+            borderColor: '#E8C07D',
+            backgroundColor: 'rgba(232, 192, 125, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#F5F5F5' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#F5F5F5' },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            },
+            y: {
+              ticks: { color: '#F5F5F5', stepSize: 1 },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  <% end %>
+
+  // Rating Trend Chart
+  <% if @trend_data[:rating_trend].length > 0 %>
+    const ratingCtx = document.getElementById('ratingChart');
+    if (ratingCtx) {
+      const ratingData = <%= @trend_data[:rating_trend].to_json.html_safe %>;
+      new Chart(ratingCtx, {
+        type: 'line',
+        data: {
+          labels: ratingData.map(item => item.month),
+          datasets: [{
+            label: 'Average Rating',
+            data: ratingData.map(item => item.average_rating),
+            borderColor: '#E8C07D',
+            backgroundColor: 'rgba(232, 192, 125, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#F5F5F5' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#F5F5F5' },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            },
+            y: {
+              ticks: { color: '#F5F5F5', stepSize: 1 },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              min: 0,
+              max: 5
+            }
+          }
+        }
+      });
+    }
+  <% end %>
+
+  // Heatmap
+  <% if @heatmap_data.present? %>
+    (function() {
+      const heatmapData = <%= @heatmap_data.to_json.html_safe %>;
+      const container = document.getElementById('heatmap');
+      if (!container) return;
+
+      // Get date range
+      const dates = Object.keys(heatmapData).map(d => new Date(d)).sort((a, b) => a - b);
+      if (dates.length === 0) return;
+
+      const startDate = dates[0];
+      const endDate = dates[dates.length - 1];
+      
+      // Get max value for color intensity
+      const maxValue = Math.max(...Object.values(heatmapData));
+      
+      // Generate weeks
+      const weeks = [];
+      let currentDate = new Date(startDate);
+      
+      // Find the start of the week (Sunday)
+      currentDate.setDate(currentDate.getDate() - currentDate.getDay());
+      
+      while (currentDate <= endDate) {
+        const week = [];
+        for (let i = 0; i < 7; i++) {
+          const date = new Date(currentDate);
+          date.setDate(date.getDate() + i);
+          const dateStr = date.toISOString().split('T')[0];
+          const value = heatmapData[dateStr] || 0;
+          week.push({ date: date, value: value, dateStr: dateStr });
+        }
+        weeks.push(week);
+        currentDate.setDate(currentDate.getDate() + 7);
+      }
+
+      // Create heatmap HTML
+      let html = '<div class="flex gap-1">';
+      html += '<div class="flex flex-col gap-1 mr-2">';
+      ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+        html += `<div class="h-4 text-xs text-gray-400" style="line-height: 16px;">${day}</div>`;
+      });
+      html += '</div>';
+      
+      html += '<div class="flex gap-1 overflow-x-auto">';
+      weeks.forEach(week => {
+        html += '<div class="flex flex-col gap-1">';
+        week.forEach((day, idx) => {
+          const intensity = maxValue > 0 ? (day.value / maxValue) : 0;
+          const bgColor = intensity === 0 
+            ? '#1a1a1a' 
+            : `rgba(232, 192, 125, ${0.3 + intensity * 0.7})`;
+          
+          const tooltip = day.value > 0 
+            ? `${day.date.toLocaleDateString()}: ${day.value} movie${day.value > 1 ? 's' : ''}`
+            : day.date.toLocaleDateString();
+          
+          html += `<div 
+            class="w-4 h-4 rounded-sm border border-gray-800 cursor-pointer hover:border-[#E8C07D] transition"
+            style="background-color: ${bgColor};"
+            title="${tooltip}"
+            data-date="${day.dateStr}"
+            data-count="${day.value}"
+          ></div>`;
+        });
+        html += '</div>';
+      });
+      html += '</div></div>';
+
+      container.innerHTML = html;
+    })();
+  <% end %>
+</script>
+
+<style>
+  .heatmap-container {
+    min-height: 150px;
+  }
+</style>
+

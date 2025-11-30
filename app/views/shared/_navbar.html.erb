@@ -17,6 +17,10 @@
           my_reviews_path,
           class: "text-[#F5F5F5] hover:text-white font-medium" %>
 
+        <%= link_to "Stats",
+          stats_path,
+          class: "text-[#F5F5F5] hover:text-white font-medium" %>
+
         <%= button_to "Log Out",
           destroy_user_session_path,
           method: :delete,

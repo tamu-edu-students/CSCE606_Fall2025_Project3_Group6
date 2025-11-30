@@ -73,9 +73,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_20_000001) do
 
   create_table "genres", force: :cascade do |t|
     t.string "name"
+    t.integer "tmdb_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "tmdb_id"
     t.index ["tmdb_id"], name: "index_genres_on_tmdb_id"
   end
 

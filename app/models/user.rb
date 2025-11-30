@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :followed_users, through: :follows, source: :followed
   has_many :following_users, foreign_key: :followed_id, class_name: "Follow", dependent: :destroy
   has_many :followers, through: :following_users, source: :follower
+  has_many :logs, dependent: :destroy
+  has_one :user_stat, dependent: :destroy
 
   validate :password_complexity
 

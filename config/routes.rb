@@ -27,4 +27,7 @@ Rails.application.routes.draw do
   end
 
   get "my_reviews", to: "reviews#my_reviews", as: :my_reviews
+
+  # Stats dashboard
+  get "stats", to: "stats#show", as: :stats
 end
