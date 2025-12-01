@@ -38,12 +38,12 @@ Rails.application.routes.draw do
   # ==================================================
   # SOCIAL & COMMUNITY ROUTES
   # ==================================================
-  resources :users, only: [:show] do
-    resource :follow, only: [:create, :destroy], controller: 'follows'
+  resources :users, only: [ :show ] do
+    resource :follow, only: [ :create, :destroy ], controller: "follows"
   end
 
   resources :lists do
-    resources :list_items, only: [:create, :destroy]
+    resources :list_items, only: [ :create, :destroy ]
   end
   # ==================================================
 

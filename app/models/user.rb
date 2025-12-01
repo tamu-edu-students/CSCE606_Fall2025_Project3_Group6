@@ -8,7 +8,7 @@ class User < ApplicationRecord
   # Basic
   has_many :reviews, dependent: :destroy
   has_many :votes, dependent: :destroy
-  
+
   # Social (Follows)
   has_many :follows, foreign_key: :follower_id, dependent: :destroy
   has_many :followed_users, through: :follows, source: :followed
@@ -22,7 +22,7 @@ class User < ApplicationRecord
   # Watchlist & History - From Main Branch
   has_one :watchlist, dependent: :destroy
   has_one :watch_history, dependent: :destroy
-  
+
   # Stats
   has_one :user_stat, dependent: :destroy
 
