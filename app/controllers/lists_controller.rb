@@ -1,7 +1,7 @@
 class ListsController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
-  before_action :set_list, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_user!, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, except: [ :show ]
+  before_action :set_list, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_user!, only: [ :edit, :update, :destroy ]
 
   def index
     @lists = current_user.lists

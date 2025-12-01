@@ -4,9 +4,9 @@ class ListItemsController < ApplicationController
   def create
     @list = current_user.lists.find(params[:list_id])
     @movie = Movie.find(params[:movie_id])
-    
+
     @list_item = @list.list_items.build(movie: @movie)
-    
+
     if @list_item.save
       redirect_back(fallback_location: movie_path(@movie), notice: "Added to list.")
     else

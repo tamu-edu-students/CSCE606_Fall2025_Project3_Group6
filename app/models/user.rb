@@ -8,12 +8,15 @@ class User < ApplicationRecord
   has_many :followed_users, through: :follows, source: :followed
   has_many :following_users, foreign_key: :followed_id, class_name: "Follow", dependent: :destroy
   has_many :followers, through: :following_users, source: :follower
+  has_many :logs, dependent: :destroy
+  has_one :user_stat, dependent: :destroy
 
   # ==================================================
-  # NEW ASSOCIATIONS
+  # MERGED ASSOCIATIONS (From Main & Feature branches)
   # ==================================================
-  has_many :lists, dependent: :destroy
-  has_many :logs, dependent: :destroy
+  has_many :lists, dependent: :destroy        # Feature: Social
+  has_one :watchlist, dependent: :destroy     # Main: Watchlist
+  has_one :watch_history, dependent: :destroy # Main: Watch History
   # ==================================================
 
   validate :password_complexity

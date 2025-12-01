@@ -4,5 +4,5 @@ class List < ApplicationRecord
   has_many :movies, through: :list_items
 
   validates :name, presence: true
-  validates :public, inclusion: { in: [true, false] }
+  validates :public, inclusion: { in: [ true, false ] }
 end

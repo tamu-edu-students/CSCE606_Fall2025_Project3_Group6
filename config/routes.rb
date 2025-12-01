@@ -19,6 +19,15 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :watchlist, only: [ :show ]
+  resources :watchlist_items, only: [ :create, :destroy ] do
+    collection do
+      post :restore
+    end
+  end
+
+  resources :watch_histories, only: [ :index, :create, :destroy ]
+
   resources :reviews, only: [] do
     member do
       post :vote
@@ -29,14 +38,17 @@ Rails.application.routes.draw do
   # ==================================================
   # SOCIAL & COMMUNITY ROUTES
   # ==================================================
-  resources :users, only: [:show] do
-    resource :follow, only: [:create, :destroy], controller: 'follows'
+  resources :users, only: [ :show ] do
+    resource :follow, only: [ :create, :destroy ], controller: "follows"
   end
 
   resources :lists do
-    resources :list_items, only: [:create, :destroy]
+    resources :list_items, only: [ :create, :destroy ]
   end
   # ==================================================
 
   get "my_reviews", to: "reviews#my_reviews", as: :my_reviews
+
+  # Stats dashboard (From Main Branch)
+  get "stats", to: "stats#show", as: :stats
 end

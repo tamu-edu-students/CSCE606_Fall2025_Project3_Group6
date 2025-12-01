@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:show, :public_profile]
+  before_action :authenticate_user!, except: [ :show, :public_profile ]
 
   def show
     if params[:id]
