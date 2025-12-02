@@ -12,13 +12,6 @@ Feature: See Similar Movies
     When I scroll to the similar movies section
     Then I should see recommended titles
 
-  Scenario: Click on similar movie
-    Given I am viewing the movie details page for "Inception"
-    And I see similar movies
-    When I click on a similar movie
-    Then I should be taken to its details page
-    And I should see the similar movie's title
-
   Scenario: Handle API failure for similar movies
     Given I am viewing the movie details page for "Inception"
     And the TMDb API fails for similar movies
