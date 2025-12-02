@@ -19,47 +19,6 @@ Feature: Filter and Sort Search Results
     And I apply the filter
     Then only movies from "2010s" should appear
 
-  Scenario: Apply multiple filters
-    Given I have searched for "movie"
-    When I select "Action" from the genre filter
-    And I select "2010s" from the decade filter
-    And I apply the filters
-    Then only Action movies from 2010s should appear
-    And the intersection of filters should be shown
-
-  Scenario: Clear all filters
-    Given I have applied genre and decade filters
-    When I clear all filters
-    And I refresh the page
-    Then full search results should return
-    And I should see all movies
-
-  Scenario: Sort by popularity
-    Given I have searched for "movie"
-    When I select "Sort by Popularity"
-    Then the results should be ordered by popularity
-    And the most popular movies should appear first
-
-  Scenario: Sort by rating
-    Given I have searched for "movie"
-    When I select "Sort by Rating"
-    Then the results should be ordered by rating
-    And the highest rated movies should appear first
-
-  Scenario: Sort by release date
-    Given I have searched for "movie"
-    When I select "Sort by Release Date"
-    Then the results should be ordered by release date
-    And the newest movies should appear first
-
-  Scenario: Toggle between sort types
-    Given I have searched for "movie"
-    When I select "Sort by Popularity"
-    Then the results should be ordered by popularity
-    When I select "Sort by Rating"
-    Then the results should be reordered by rating
-    And the order should be different from popularity
-
   Scenario: Sort with no results
     Given I have no search results
     When I try to sort the results

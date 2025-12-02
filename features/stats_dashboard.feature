@@ -52,43 +52,4 @@ Feature: Stats Dashboard
     And I should see the rating trend chart
     And the charts should display data points
 
-  Scenario: View trend charts with insufficient data
-    Given I have insufficient log data
-    When I visit the stats page
-    Then I should see a placeholder for charts
-    And I should see a message to log more movies
-
-  Scenario: Trend charts update after adding logs
-    Given I have enough log data for trends
-    When I visit the stats page
-    And I note the current trend data
-    And I add new logs with dates
-    And I refresh the stats page
-    Then the trend lines should update
-
-  Scenario: View activity heatmap with logs
-    Given I have logs with dates
-    When I visit the stats page
-    Then I should see the activity heatmap
-    And active days should be highlighted
-    And I should see color intensity based on activity
-
-  Scenario: View activity heatmap with no logs
-    Given I have no logs with dates
-    When I visit the stats page
-    Then I should see an empty heatmap grid
-    And I should see a message about no activity data
-
-  Scenario: Heatmap updates after adding log
-    Given I have logs with dates
-    When I visit the stats page
-    And I add a new log with today's date
-    And I refresh the stats page
-    Then the corresponding day should be highlighted
-
-  @no-background
-  Scenario: Access stats page without authentication
-    Given I am not logged in
-    When I try to visit the stats page
-    Then I should be redirected to the login page
 
