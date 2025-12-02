@@ -1,82 +1,164 @@
-<!-- HERO SECTION — Cinematic + Glass -->
-<section class="pt-40 pb-32 px-6 text-center text-white glass-dark max-w-7xl mx-auto mt-20">
-  <h1 class="font-cinzel text-6xl md:text-7xl font-bold text-cinematico-gold tracking-wide">
-    CINEMATICO
-  </h1>
-
-  <p class="mt-6 text-xl text-cinematico-light font-inter max-w-2xl mx-auto">
-    Made for the endlessly curious cinephile
-  </p>
-
-  <div class="mt-10 flex justify-center gap-4">
-    <%= link_to "Get Started",
-      new_user_registration_path,
-      class: "px-8 py-4 bg-cinematico-gold text-black font-semibold rounded-lg hover:opacity-90 transition" %>
-  </div>
-</section>
-
-
-<!-- FEATURES — Glass Cards -->
-<section class="py-28 px-6">
-  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-white">
-  <div class="glass p-6 rounded-xl border border-white/10">
-    <h3 class="text-white font-semibold text-lg mb-2">Track Your Movies</h3>
-    <p class="text-gray-300 text-sm">Log films with one click.</p>
-  </div>
-
-  <div class="glass p-6 rounded-xl border border-white/10">
-    <h3 class="text-white font-semibold text-lg mb-2">Deep Viewing Stats</h3>
-    <p class="text-gray-300 text-sm">Genres, decades, directors & more.</p>
-  </div>
-
-  <div class="glass p-6 rounded-xl border border-white/10">
-    <h3 class="text-white font-semibold text-lg mb-2">Review Reactions</h3>
-    <p class="text-gray-300 text-sm">Upvotes & downvotes, no clutter.</p>
-  </div>
-
-  <div class="glass p-6 rounded-xl border border-white/10">
-    <h3 class="text-white font-semibold text-lg mb-2">Smart Recommendations</h3>
-    <p class="text-gray-300 text-sm">Powered by your unique taste.</p>
-  </div>
-
-
-  </div>
-</section>
-
-
-<!-- TRENDING GRID — Frosted Glass Background -->
-<section class="py-24 px-6 glass-thin max-w-7xl mx-auto text-white">
-  <h2 class="font-cinzel text-4xl text-center mb-12">Trending Among Cinephiles</h2>
-
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mx-auto">
-    <% 8.times do %>
-      <div>
-        <div class="aspect-[2/3] bg-[rgba(255,255,255,0.08)] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]"></div>
-        <p class="mt-3 text-sm font-medium text-cinematico-light">Movie Title</p>
+<div class="min-h-screen flex flex-col">
+  <% if user_signed_in? %>
+    <div class="pt-24 px-6 pb-12 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div class="lg:col-span-2">
+        <h2 class="font-cinzel text-3xl text-cinematico-gold mb-8">Activity Feed</h2>
+        <% if @activities.present? %>
+          <div class="space-y-6">
+            <% @activities.each do |activity| %>
+              <div class="glass p-6 rounded-lg border border-white/10 shadow-lg">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="w-10 h-10 bg-cinematico-gold rounded-full flex items-center justify-center text-cinematico-black font-bold">
+                    <%= activity.user.username ? activity.user.username[0].upcase : (activity.user.email[0].upcase rescue 'U') %>
+                  </div>
+                  <div>
+                    <p class="text-white font-bold">
+                      <%= link_to (activity.user.username || activity.user.email), user_path(activity.user), class: "hover:text-cinematico-gold transition" %>
+                    </p>
+                    <p class="text-xs text-gray-400">
+                      <% if activity.is_a?(Review) %>
+                        reviewed <%= link_to activity.movie.title, movie_path(activity.movie), class: "text-cinematico-gold hover:underline" %>
+                      <% elsif activity.class.name == 'Log' %>
+                        watched <%= link_to activity.movie.title, movie_path(activity.movie), class: "text-cinematico-gold hover:underline" %>
+                      <% end %>
+                      • <%= time_ago_in_words(activity.created_at) %> ago
+                    </p>
+                  </div>
+                </div>
+                
+                <% if activity.is_a?(Review) %>
+                  <div class="pl-14">
+                    <div class="flex items-center gap-2 mb-2">
+                      <span class="text-cinematico-gold font-bold text-sm">★ <%= activity.rating %></span>
+                    </div>
+                    <p class="text-gray-200 text-sm leading-relaxed"><%= activity.body %></p>
+                  </div>
+                <% elsif activity.class.name == 'Log' %>
+                   <div class="pl-14">
+                     <span class="text-cinematico-gold font-bold text-sm">Rated: <%= activity.rating %>/10</span>
+                   </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="glass p-12 rounded-lg border border-white/10 text-center">
+            <h3 class="text-xl text-white mb-2">Your feed is empty</h3>
+            <p class="text-gray-400 mb-6">Follow other cinephiles to see their activity here.</p>
+          </div>
+        <% end %>
       </div>
-    <% end %>
-  </div>
-</section>
 
-
-<!-- HOW IT WORKS — Glass Centered -->
-<section class="py-24 px-6 text-white glass max-w-5xl mx-auto text-center">
-  <h2 class="font-cinzel text-4xl mb-12">How It Works</h2>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-    <div>
-      <div class="step-circle">1</div>
-      <p class="mt-4 font-semibold text-xl">Create Profile</p>
+      <div>
+        <h2 class="font-cinzel text-xl text-white mb-6">Trending Now</h2>
+        <div class="space-y-4">
+          <% @trending_movies.each do |movie| %>
+            <%= link_to movie_path(movie), class: "flex gap-4 group glass p-3 rounded-lg border border-white/5 hover:border-cinematico-gold/30 transition" do %>
+              <% if movie.poster_path %>
+                <%= image_tag movie.poster_url, class: "w-16 h-24 object-cover rounded shadow-md" %>
+              <% else %>
+                 <div class="w-16 h-24 bg-gray-800 rounded flex items-center justify-center text-xs text-gray-500">No Poster</div>
+              <% end %>
+              <div class="flex flex-col justify-center">
+                <h4 class="text-gray-200 font-bold group-hover:text-cinematico-gold transition line-clamp-2"><%= movie.title %></h4>
+                <p class="text-xs text-gray-500 mt-1"><%= movie.release_date&.year %></p>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
     </div>
+  <% else %>
+    <section class="pt-40 pb-32 px-6 text-center text-white glass-dark max-w-7xl mx-auto mt-20">
+      <h1 class="font-cinzel text-6xl md:text-7xl font-bold text-cinematico-gold tracking-wide">
+        CINEMATICO
+      </h1>
 
-    <div>
-      <div class="step-circle">2</div>
-      <p class="mt-4 font-semibold text-xl">Add Films</p>
-    </div>
+      <p class="mt-6 text-xl text-cinematico-light font-inter max-w-2xl mx-auto">
+        Made for the endlessly curious cinephile
+      </p>
 
-    <div>
-      <div class="step-circle">3</div>
-      <p class="mt-4 font-semibold text-xl">View Insights</p>
-    </div>
-  </div>
-</section>
+      <div class="mt-10 flex justify-center gap-4">
+        <%= link_to "Get Started",
+          new_user_registration_path,
+          class: "px-8 py-4 bg-cinematico-gold text-black font-semibold rounded-lg hover:opacity-90 transition" %>
+      </div>
+    </section>
+
+
+    <section class="py-28 px-6">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-white">
+      <div class="glass p-6 rounded-xl border border-white/10">
+        <h3 class="text-white font-semibold text-lg mb-2">Track Your Movies</h3>
+        <p class="text-gray-300 text-sm">Log films with one click.</p>
+      </div>
+
+      <div class="glass p-6 rounded-xl border border-white/10">
+        <h3 class="text-white font-semibold text-lg mb-2">Deep Viewing Stats</h3>
+        <p class="text-gray-300 text-sm">Genres, decades, directors & more.</p>
+      </div>
+
+      <div class="glass p-6 rounded-xl border border-white/10">
+        <h3 class="text-white font-semibold text-lg mb-2">Review Reactions</h3>
+        <p class="text-gray-300 text-sm">Upvotes & downvotes, no clutter.</p>
+      </div>
+
+      <div class="glass p-6 rounded-xl border border-white/10">
+        <h3 class="text-white font-semibold text-lg mb-2">Smart Recommendations</h3>
+        <p class="text-gray-300 text-sm">Powered by your unique taste.</p>
+      </div>
+
+
+      </div>
+    </section>
+
+
+    <section class="py-24 px-6 glass-thin max-w-7xl mx-auto text-white">
+      <h2 class="font-cinzel text-4xl text-center mb-12">Trending Among Cinephiles</h2>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mx-auto">
+        <% if @trending_movies %>
+          <% @trending_movies.each do |movie| %>
+            <%= link_to movie_path(movie), class: "group block" do %>
+              <div class="aspect-[2/3] bg-gray-800 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.4)] relative">
+                <% if movie.poster_path %>
+                  <%= image_tag movie.poster_url, class: "w-full h-full object-cover group-hover:scale-105 transition duration-500" %>
+                <% end %>
+              </div>
+              <p class="mt-3 text-sm font-medium text-cinematico-light group-hover:text-cinematico-gold transition"><%= movie.title %></p>
+            <% end %>
+          <% end %>
+        <% else %>
+          <% 8.times do %>
+            <div>
+              <div class="aspect-[2/3] bg-[rgba(255,255,255,0.08)] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]"></div>
+              <p class="mt-3 text-sm font-medium text-cinematico-light">Movie Title</p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+
+
+    <section class="py-24 px-6 text-white glass max-w-5xl mx-auto text-center">
+      <h2 class="font-cinzel text-4xl mb-12">How It Works</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div>
+          <div class="step-circle">1</div>
+          <p class="mt-4 font-semibold text-xl">Create Profile</p>
+        </div>
+
+        <div>
+          <div class="step-circle">2</div>
+          <p class="mt-4 font-semibold text-xl">Add Films</p>
+        </div>
+
+        <div>
+          <div class="step-circle">3</div>
+          <p class="mt-4 font-semibold text-xl">View Insights</p>
+        </div>
+      </div>
+    </section>
+  <% end %>
+</div>

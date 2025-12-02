@@ -1,28 +1,28 @@
 {
   "RSpec": {
     "coverage": {
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/helpers/application_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/helpers/application_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/helpers/home_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/helpers/home_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/helpers/watchlist_items_helper.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/helpers/watchlist_items_helper.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/controllers/movies_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/movies_controller.rb": {
         "lines": [
           1,
           1,
@@ -358,7 +358,7 @@
           }
         }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/controllers/application_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/application_controller.rb": {
         "lines": [
           1,
           null,
@@ -386,14 +386,14 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/mailers/devise_mailer.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/mailers/devise_mailer.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/mailers/application_mailer.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/mailers/application_mailer.rb": {
         "lines": [
           1,
           1,
@@ -408,22 +408,14 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/achievement.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/achievement.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/application_record.rb": {
-        "lines": [
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/email_preference.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/application_record.rb": {
         "lines": [
           1,
           1,
@@ -431,16 +423,26 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/follow.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/email_preference.rb": {
         "lines": [
-          1,
           1,
           1,
           null
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/genre.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/follow.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/genre.rb": {
         "lines": [
           1,
           1,
@@ -458,7 +460,43 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/list_item.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/list_item.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/list.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/log.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/log_tag.rb": {
         "lines": [
           1,
           1,
@@ -467,15 +505,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/list.rb": {
-        "lines": [
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/log.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/movie_genre.rb": {
         "lines": [
           1,
           1,
@@ -484,7 +514,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/log_tag.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/movie_person.rb": {
         "lines": [
           1,
           1,
@@ -493,25 +523,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/movie_genre.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/movie_person.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null
-        ],
-        "branches": {}
-      },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/movie.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/movie.rb": {
         "lines": [
           1,
           1,
@@ -582,7 +594,7 @@
           }
         }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/notification.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/notification.rb": {
         "lines": [
           1,
           1,
@@ -590,7 +602,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/person.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/person.rb": {
         "lines": [
           1,
           1,
@@ -613,7 +625,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/review.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/review.rb": {
         "lines": [
           1,
           1,
@@ -624,7 +636,7 @@
           1,
           1,
           null,
-          4,
+          6,
           8,
           null,
           1,
@@ -638,14 +650,14 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/tag.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/tag.rb": {
         "lines": [
           1,
           null
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/user_achievement.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/user_achievement.rb": {
         "lines": [
           1,
           1,
@@ -654,31 +666,59 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/user.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/user.rb": {
         "lines": [
           1,
           1,
           null,
           null,
+          null,
+          null,
+          null,
+          null,
           1,
           1,
+          null,
+          null,
           1,
           1,
           1,
           1,
           null,
-          1,
-          1,
-          1,
           null,
+          1,
           1,
           null,
           null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
           null,
           null,
           null,
           null,
           null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          2,
+          null,
+          null,
+          1,
+          0,
           null,
           null,
           1,
@@ -693,24 +733,20 @@
           null,
           null,
           null,
-          null,
-          1,
-          0,
-          null,
           null
         ],
         "branches": {
-          "[:if, 0, 29, 4, 29, 29]": {
-            "[:then, 1, 29, 4, 29, 10]": 5,
-            "[:else, 2, 29, 4, 29, 29]": 81
+          "[:if, 0, 57, 4, 57, 29]": {
+            "[:then, 1, 57, 4, 57, 10]": 5,
+            "[:else, 2, 57, 4, 57, 29]": 81
           },
-          "[:unless, 3, 33, 4, 36, 7]": {
-            "[:else, 4, 33, 4, 36, 7]": 80,
-            "[:then, 5, 34, 6, 35, 138]": 1
+          "[:unless, 3, 61, 4, 64, 7]": {
+            "[:else, 4, 61, 4, 64, 7]": 80,
+            "[:then, 5, 62, 6, 63, 138]": 1
           }
         }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/user_stat.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/user_stat.rb": {
         "lines": [
           1,
           1,
@@ -718,7 +754,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/vote.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/vote.rb": {
         "lines": [
           1,
           1,
@@ -738,7 +774,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/watch_history.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/watch_history.rb": {
         "lines": [
           1,
           1,
@@ -749,7 +785,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/watch_log.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/watch_log.rb": {
         "lines": [
           1,
           1,
@@ -791,7 +827,7 @@
           }
         }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/watchlist_item.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/watchlist_item.rb": {
         "lines": [
           1,
           1,
@@ -800,7 +836,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/models/watchlist.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/models/watchlist.rb": {
         "lines": [
           1,
           1,
@@ -810,7 +846,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/services/tmdb_service.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/services/tmdb_service.rb": {
         "lines": [
           1,
           1,
@@ -1039,7 +1075,7 @@
           }
         }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/controllers/watch_histories_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/watch_histories_controller.rb": {
         "lines": [
           1,
           1,
@@ -1185,18 +1221,36 @@
           }
         }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/controllers/home_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/home_controller.rb": {
         "lines": [
           1,
           1,
           null,
           1,
+          1,
+          0,
+          null,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          null,
+          null,
+          1,
           null,
           null
         ],
-        "branches": {}
+        "branches": {
+          "[:if, 0, 5, 4, 14, 7]": {
+            "[:then, 1, 6, 6, 13, 61]": 0,
+            "[:else, 2, 5, 4, 14, 7]": 1
+          }
+        }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/controllers/users/registrations_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/users/registrations_controller.rb": {
         "lines": [
           1,
           1,
@@ -1222,7 +1276,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/controllers/reviews_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/reviews_controller.rb": {
         "lines": [
           1,
           1,
@@ -1335,15 +1389,34 @@
           }
         }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/controllers/users_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/users_controller.rb": {
         "lines": [
           1,
           1,
           null,
           1,
+          4,
+          0,
+          4,
+          2,
+          null,
           2,
           2,
+          null,
+          null,
           2,
+          0,
+          0,
+          null,
+          null,
+          2,
+          2,
+          null,
+          2,
+          2,
+          null,
+          0,
+          null,
           null,
           null,
           1,
@@ -1356,6 +1429,14 @@
           null,
           null,
           2,
+          2,
+          null,
+          2,
+          0,
+          null,
+          2,
+          null,
+          null,
           2,
           null,
           null,
@@ -1380,25 +1461,45 @@
           null
         ],
         "branches": {
-          "[:if, 0, 6, 4, 6, 61]": {
-            "[:then, 1, 6, 4, 6, 28]": 0,
-            "[:else, 2, 6, 4, 6, 61]": 2
+          "[:if, 0, 5, 4, 12, 7]": {
+            "[:then, 1, 6, 6, 6, 36]": 0,
+            "[:else, 2, 7, 4, 12, 7]": 4
           },
-          "[:if, 3, 14, 4, 17, 7]": {
-            "[:then, 4, 15, 6, 16, 12]": 2,
-            "[:else, 5, 14, 4, 17, 7]": 2
+          "[:if, 3, 7, 4, 12, 7]": {
+            "[:then, 4, 8, 6, 8, 26]": 2,
+            "[:else, 5, 10, 6, 11, 12]": 2
           },
-          "[:if, 6, 19, 4, 19, 61]": {
-            "[:then, 7, 19, 4, 19, 28]": 0,
-            "[:else, 8, 19, 4, 19, 61]": 2
+          "[:if, 6, 14, 4, 17, 7]": {
+            "[:then, 7, 15, 6, 16, 12]": 0,
+            "[:else, 8, 14, 4, 17, 7]": 2
           },
-          "[:if, 9, 29, 4, 33, 7]": {
-            "[:then, 10, 30, 6, 30, 58]": 2,
-            "[:else, 11, 32, 6, 32, 18]": 2
+          "[:if, 9, 19, 4, 19, 61]": {
+            "[:then, 10, 19, 4, 19, 28]": 2,
+            "[:else, 11, 19, 4, 19, 61]": 0
+          },
+          "[:if, 12, 22, 4, 26, 7]": {
+            "[:then, 13, 23, 6, 23, 26]": 2,
+            "[:else, 14, 25, 6, 25, 46]": 0
+          },
+          "[:if, 15, 33, 4, 36, 7]": {
+            "[:then, 16, 34, 6, 35, 12]": 2,
+            "[:else, 17, 33, 4, 36, 7]": 2
+          },
+          "[:if, 18, 38, 4, 38, 61]": {
+            "[:then, 19, 38, 4, 38, 28]": 2,
+            "[:else, 20, 38, 4, 38, 61]": 0
+          },
+          "[:if, 21, 41, 4, 45, 7]": {
+            "[:then, 22, 42, 6, 42, 26]": 0,
+            "[:else, 23, 44, 6, 44, 46]": 2
+          },
+          "[:if, 24, 56, 4, 60, 7]": {
+            "[:then, 25, 57, 6, 57, 58]": 2,
+            "[:else, 26, 59, 6, 59, 18]": 2
           }
         }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/controllers/watchlist_items_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/watchlist_items_controller.rb": {
         "lines": [
           1,
           1,
@@ -1473,6 +1574,7 @@
           2,
           null,
           2,
+          null,
           null
         ],
         "branches": {
@@ -1526,7 +1628,144 @@
           }
         }
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/controllers/watchlists_controller.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/follows_controller.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/list_items_controller.rb": {
+        "lines": [
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/lists_controller.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/stats_controller.rb": {
+        "lines": [
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/controllers/watchlists_controller.rb": {
         "lines": [
           0,
           0,
@@ -1539,7 +1778,7 @@
         ],
         "branches": {}
       },
-      "/home/fallacy/tamu/software_engineering/CSCE606_Fall2025_Project3_Group6/app/jobs/application_job.rb": {
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/jobs/application_job.rb": {
         "lines": [
           0,
           null,
@@ -1550,8 +1789,178 @@
           0
         ],
         "branches": {}
+      },
+      "/mnt/c/Users/IVC-LAB-7/study/course/software/CSCE606_Fall2025_Project3_Group6/app/services/stats_service.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          null,
+          0,
+          0,
+          null,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          null,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          null,
+          0,
+          null,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          null,
+          0,
+          null,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
       }
     },
-    "timestamp": 1764227474
+    "timestamp": 1764607726
   }
 }

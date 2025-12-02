@@ -1,0 +1,48 @@
+<div class="min-h-screen pt-24 px-6 pb-12 bg-cinematico-black">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-8">
+      <%= link_to "← Back to Profile", user_path(@list.user), class: "text-cinematico-gold hover:underline" %>
+    </div>
+    
+    <div class="mb-12 border-b border-gray-800 pb-8">
+      <div class="flex justify-between items-start">
+        <div>
+          <h1 class="font-cinzel text-5xl text-cinematico-gold mb-4"><%= @list.name %></h1>
+          <p class="text-cinematico-light text-lg mb-2"><%= @list.description %></p>
+          <p class="text-cinematico-grey text-sm">Curated by <%= link_to @list.user.username || @list.user.email, user_path(@list.user), class: "hover:text-white" %></p>
+        </div>
+        <% if current_user == @list.user %>
+          <%= button_to "Delete List", list_path(@list), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-500 hover:text-red-400 bg-transparent border-0 cursor-pointer" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <% @list.movies.each do |movie| %>
+        <div class="group relative">
+          <%= link_to movie_path(movie) do %>
+            <div class="aspect-[2/3] bg-gray-800 rounded-lg overflow-hidden mb-2">
+              <% if movie.poster_path %>
+                <%= image_tag movie.poster_url, class: "w-full h-full object-cover group-hover:scale-105 transition duration-300" %>
+              <% else %>
+                <div class="w-full h-full flex items-center justify-center text-gray-500">No Poster</div>
+              <% end %>
+            </div>
+            <h3 class="text-white font-medium truncate group-hover:text-cinematico-gold"><%= movie.title %></h3>
+          <% end %>
+          
+          <% if current_user == @list.user %>
+            <% item = @list.list_items.find_by(movie: movie) %>
+            <%= button_to "Remove", list_list_item_path(@list, item), method: :delete, class: "absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition cursor-pointer" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    
+    <% if @list.movies.empty? %>
+      <div class="text-center py-20 bg-cinematico-dark rounded border border-gray-800">
+        <p class="text-cinematico-grey">This list is empty.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

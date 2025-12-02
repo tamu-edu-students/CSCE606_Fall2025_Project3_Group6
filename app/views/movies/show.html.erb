@@ -7,13 +7,11 @@
         <%= link_to "Back to Search", movies_path, class: "mt-4 inline-block px-6 py-2 bg-cinematico-gold text-cinematico-black font-semibold rounded-lg hover:bg-opacity-90 transition" %>
       </div>
     <% elsif @movie %>
-      <!-- Movie Header -->
       <div class="mb-8">
         <%= link_to "← Back to Search", movies_path, class: "text-cinematico-gold hover:underline mb-4 inline-block" %>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-        <!-- Poster -->
         <div class="md:col-span-1">
           <% if @movie.poster_path %>
             <%= image_tag @movie.poster_url, 
@@ -27,7 +25,6 @@
           <% end %>
         </div>
 
-        <!-- Movie Info -->
         <div class="md:col-span-2">
           <div class="flex items-start justify-between mb-4">
             <div>
@@ -51,6 +48,18 @@
             </div>
           </div>
           
+          <% if user_signed_in? %>
+            <div class="mb-6 relative inline-block text-left">
+              <%= form_with url: list_list_items_path(list_id: 0), method: :post, class: "flex gap-2 items-center" do |f| %>
+                <%= hidden_field_tag :movie_id, @movie.id %>
+                <%= select_tag :list_id, 
+                    options_from_collection_for_select(current_user.lists, :id, :name), 
+                    prompt: "Add to List...",
+                    class: "bg-cinematico-dark text-white text-sm rounded border border-gray-700 px-3 py-2 focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold" %>
+                <%= f.submit "Add", class: "bg-cinematico-gold text-cinematico-black text-sm font-bold px-4 py-2 rounded hover:bg-yellow-500 cursor-pointer" %>
+              <% end %>
+            </div>
+          <% end %>
           <div class="flex flex-wrap gap-4 mb-4 text-gray-300">
             <% if @movie.release_date %>
               <span><%= @movie.release_date.year %></span>
@@ -78,7 +87,6 @@
             </div>
           <% end %>
 
-          <!-- Cast -->
           <% if @movie.movie_people.where(role: "cast").any? %>
             <div class="mb-6">
               <h2 class="font-semibold text-xl mb-3">Cast</h2>
@@ -101,7 +109,6 @@
             </div>
           <% end %>
 
-          <!-- Directors -->
           <% directors = @movie.movie_people.where(role: "director") %>
           <% if directors.any? %>
             <div class="mt-6">
@@ -169,7 +176,6 @@
         </div>
       </div>
       
-      <!-- Similar Movies Section -->
       <div class="mt-12">
         <h2 class="font-cinzel text-3xl text-cinematico-gold mb-6">Similar Movies</h2>
         
@@ -188,16 +194,16 @@
                 <%= link_to movie_path(movie['id']), class: 'group block focus:outline-none focus-visible:ring-2 focus-visible:ring-cinematico-gold rounded-lg' do %>
                   <div class="relative overflow-hidden rounded-lg bg-cinematico-dark border border-cinematico-grey hover:border-cinematico-gold transition-all duration-300">
                     <% if movie['poster_path'] %>
-                      <%= image_tag TmdbService.poster_url(movie['poster_path']),
-                          alt: movie['title'],
+                      <%= image_tag TmdbService.poster_url(movie['poster_path']), 
+                          alt: movie['title'], 
                           class: 'w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300',
-                          onerror: "this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'450\'%3E%3Crect fill=\'%23333\' width=\'300\' height=\'450\'/%3E%3Ctext fill=\'%23999\' font-family=\'Arial\' font-size=\'18\' x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3ENo Poster%3C/text%3E%3C/svg%3E'" %>
+                          onerror: "this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'450\\'%3E%3Crect fill=\\'%23333\\' width=\\'300\\' height=\\'450\\'/%3E%3Ctext fill=\\'%23999\\' font-family=\\'Arial\\' font-size=\\'18\\' x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'%3ENo Poster%3C/text%3E%3C/svg%3E'" %>
                     <% else %>
                       <div class="w-full aspect-[2/3] bg-cinematico-grey flex items-center justify-center">
                         <span class="text-cinematico-dark text-xs">No Poster</span>
                       </div>
                     <% end %>
-
+                    
                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cinematico-black to-transparent p-3">
                       <h3 class="font-semibold text-white text-sm mb-1 line-clamp-2"><%= movie['title'] %></h3>
                       <% if movie['release_date'] %>
@@ -210,15 +216,6 @@
                         </p>
                       <% end %>
                     </div>
-                  </div>
-                <% end %>
-
-                <% if user_signed_in? %>
-                  <div class="absolute top-2 right-2">
-                    <%= form_with url: watchlist_items_path, method: :post, local: true do |f| %>
-                      <%= hidden_field_tag :movie_id, movie['id'] %>
-                      <%= f.submit "+", class: "w-8 h-8 rounded-full bg-cinematico-gold text-cinematico-black font-bold text-sm shadow-md hover:opacity-90" %>
-                    <% end %>
                   </div>
                 <% end %>
               </div>

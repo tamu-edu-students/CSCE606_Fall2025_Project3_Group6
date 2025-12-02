@@ -1,11 +1,9 @@
 <div class="min-h-screen bg-cinematico-black pt-24 px-6 pb-12">
   <div class="max-w-5xl mx-auto space-y-10">
 
-    <!-- Profile header + stats -->
     <div class="glass p-8 md:p-10">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
 
-        <!-- Identity column -->
         <div class="flex flex-col items-center md:items-start gap-4">
           <div class="h-20 w-20 rounded-full bg-cinematico-gold text-cinematico-black flex items-center justify-center text-3xl font-bold">
             <%= @user.username.to_s.first&.upcase || "U" %>
@@ -14,6 +12,9 @@
           <div class="text-center md:text-left">
             <h1 class="font-cinzel text-3xl text-white mb-1"><%= @user.username %></h1>
             <p class="text-sm text-gray-300"><%= @user.email %></p>
+            <p class="text-xs text-cinematico-gold mt-1">
+              <%= @user.followers.count %> Followers • <%= @user.followed_users.count %> Following
+            </p>
           </div>
 
           <div class="flex flex-wrap gap-3 text-xs text-gray-300 mt-2">
@@ -27,14 +28,25 @@
           </div>
 
           <div class="flex flex-wrap gap-3 mt-4">
-            <%= link_to "Edit Profile", settings_profile_path,
-              class: "px-4 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded-lg hover:bg-opacity-90 transition" %>
-            <%= link_to "My Reviews", my_reviews_path,
-              class: "px-4 py-2 border border-gray-700 text-gray-200 text-sm rounded-lg hover:border-cinematico-gold hover:text-cinematico-gold transition" %>
+            <% if user_signed_in? %>
+              <% if current_user == @user %>
+                <%= link_to "Edit Profile", settings_profile_path,
+                  class: "px-4 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded-lg hover:bg-opacity-90 transition" %>
+                <%= link_to "My Reviews", my_reviews_path,
+                  class: "px-4 py-2 border border-gray-700 text-gray-200 text-sm rounded-lg hover:border-cinematico-gold hover:text-cinematico-gold transition" %>
+              <% else %>
+                <% if current_user.following?(@user) %>
+                  <%= button_to "Unfollow", user_follow_path(@user), method: :delete, 
+                      class: "px-4 py-2 border border-cinematico-gold text-cinematico-gold text-sm font-semibold rounded-lg hover:bg-cinematico-gold hover:text-cinematico-black transition" %>
+                <% else %>
+                  <%= button_to "Follow", user_follow_path(@user), method: :post, 
+                      class: "px-4 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded-lg hover:bg-opacity-90 transition" %>
+                <% end %>
+              <% end %>
+            <% end %>
           </div>
         </div>
 
-        <!-- Stats column -->
         <div class="md:col-span-2">
           <h2 class="font-cinzel text-xl text-cinematico-gold mb-4">Your Stats</h2>
 
@@ -66,12 +78,37 @@
       </div>
     </div>
 
-    <!-- Recent reviews -->
+    <div class="glass p-8 md:p-10">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-cinzel text-2xl text-cinematico-gold">Lists</h2>
+        <% if user_signed_in? && current_user == @user %>
+          <%= link_to "+ New List", new_list_path, class: "text-sm text-cinematico-gold hover:underline" %>
+        <% end %>
+      </div>
+
+      <% if @lists.present? %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <% @lists.each do |list| %>
+            <%= link_to list_path(list), class: "block bg-cinematico-dark border border-gray-800 rounded-lg p-4 hover:border-cinematico-gold transition group" do %>
+              <h3 class="text-white font-semibold group-hover:text-cinematico-gold transition"><%= list.name %></h3>
+              <p class="text-xs text-gray-400 mt-1">
+                <%= list.list_items.count %> movies • <%= list.public? ? "Public" : "Private" %>
+              </p>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-gray-400 text-sm italic">No lists created yet.</p>
+      <% end %>
+    </div>
+
     <% if @recent_reviews.present? %>
       <div class="glass p-8 md:p-10">
         <div class="flex items-center justify-between mb-4">
           <h2 class="font-cinzel text-2xl text-cinematico-gold">Recent Reviews</h2>
-          <%= link_to "View all", my_reviews_path, class: "text-gray-300 hover:text-cinematico-gold text-sm" %>
+          <% if user_signed_in? && current_user == @user %>
+             <%= link_to "View all", my_reviews_path, class: "text-gray-300 hover:text-cinematico-gold text-sm" %>
+          <% end %>
         </div>
 
         <div class="space-y-4">
@@ -86,7 +123,7 @@
                 </span>
               </div>
               <p class="text-xs text-gray-400 mb-2">
-                Reviewed on <%= review.created_at.strftime("%B %d, %Y") %>
+                 Reviewed on <%= review.created_at.strftime("%B %d, %Y") %>
               </p>
               <% if review.body.present? %>
                 <p class="text-sm text-gray-200 line-clamp-3"><%= review.body %></p>
