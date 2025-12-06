@@ -10,7 +10,8 @@
 
       <% if user_signed_in? %>
         <div class="mr-2">
-          <%= render 'shared/notifications_dropdown' %>
+          <%= render 'shared/notifications_dropdown', user: current_user, signed_in: true %>
+          <%= turbo_stream_from [current_user, :notifications] %>
         </div>
         <%= link_to "Profile",
           profile_path,

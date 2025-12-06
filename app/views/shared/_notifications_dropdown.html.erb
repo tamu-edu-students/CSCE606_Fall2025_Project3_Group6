@@ -1,9 +1,19 @@
-<div data-controller="notifications" class="relative">
+<%# Use locals when rendered via Turbo streams (no request env) %>
+<% user_local = local_assigns[:user] || (defined?(current_user) ? current_user : nil) %>
+<% signed_in = if local_assigns.key?(:signed_in)
+                 local_assigns[:signed_in]
+               elsif defined?(user_signed_in?)
+                 user_signed_in?
+               else
+                 user_local.present?
+               end %>
+
+<div id="notifications-dropdown" data-controller="notifications" class="relative">
   <button data-action="click->notifications#toggle" class="relative">
     <!-- Bell icon -->
     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-    <% if user_signed_in? %>
-      <% unread_count = current_user.notifications.unread.count %>
+    <% if signed_in && user_local %>
+      <% unread_count = user_local.notifications.unread.count %>
       <% if unread_count > 0 %>
         <span class="absolute -top-1 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"><%= unread_count %></span>
       <% end %>
@@ -12,13 +22,13 @@
 
 <div data-notifications-target="panel" class="hidden absolute right-0 mt-2 w-96 bg-[#0A0A0A] border border-[#8B7355] shadow-lg z-50">
     <div class="p-4 bg-gradient-to-r from-[#0A0A0A] to-[#1A1A1A]">
-      <% if user_signed_in? %>
+  <% if signed_in && user_local %>
         <div class="flex items-center justify-between mb-3">
           <strong class="font-cinzel text-2xl text-cinematico-gold font-bold">Notifications</strong>
           <%= link_to 'View all', notifications_path, class: 'text-sm text-cinematico-gold hover:text-white transition' %>
         </div>
 
-        <% recent = current_user.notifications.recent.limit(6) %>
+        <% recent = user_local.notifications.recent.limit(6) %>
         <% if recent.any? %>
           <ul class="space-y-2">
             <% recent.each do |n| %>

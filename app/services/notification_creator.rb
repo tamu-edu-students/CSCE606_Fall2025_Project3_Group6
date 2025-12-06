@@ -21,10 +21,20 @@ class NotificationCreator
     end
 
     attrs = build_attributes(actor, recipient, notifiable, notification_type, body, data)
-    Notification.create!(attrs)
-    
+    notification = Notification.create!(attrs)
+
+    # Push fresh dropdown HTML to the recipient in real time
+    Turbo::StreamsChannel.broadcast_update_to(
+      [recipient, :notifications],
+      target: "notifications-dropdown",
+      partial: "shared/notifications_dropdown",
+      locals: { user: recipient, signed_in: true }
+    )
+
     # Send email notification if body is present
     NotificationMailer.send_notification(recipient, body).deliver_later if body.present?
+
+    notification
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.warn "Failed to create notification: #{e.record.errors.full_messages.join(', ')}"
     nil
