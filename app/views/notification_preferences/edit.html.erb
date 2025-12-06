@@ -1,0 +1,40 @@
+<div class="max-w-3xl mx-auto p-6">
+  <h1 class="font-cinzel text-4xl text-cinematico-gold mb-6">Notification Settings</h1>
+
+  <%= form_with model: @preference, url: notification_preferences_path, method: :patch, class: "space-y-6" do |f| %>
+    <div class="bg-[#0F0F0F] border border-[#8B7355] p-6">
+      <h2 class="text-xl text-cinematico-gold mb-4">Choose which notifications you want to receive</h2>
+      
+      <div class="space-y-4">
+        <div class="flex items-start gap-3 p-3 bg-[#1A1A1A]">
+          <%= f.check_box :review_created, class: "mt-1 w-5 h-5 text-cinematico-gold bg-cinematico-dark border-cinematico-grey rounded focus:ring-cinematico-gold" %>
+          <%= f.label :review_created, class: "flex-1 text-cinematico-light" do %>
+            <span class="font-semibold block">New Reviews from Followers</span>
+            <p class="text-sm text-cinematico-grey mt-1">Get notified when people you follow post a new review</p>
+          <% end %>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 bg-[#1A1A1A]">
+          <%= f.check_box :review_voted, class: "mt-1 w-5 h-5 text-cinematico-gold bg-cinematico-dark border-cinematico-grey rounded focus:ring-cinematico-gold" %>
+          <%= f.label :review_voted, class: "flex-1 text-cinematico-light" do %>
+            <span class="font-semibold block">Votes on Your Reviews</span>
+            <p class="text-sm text-cinematico-grey mt-1">Get notified when someone likes or dislikes your review</p>
+          <% end %>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 bg-[#1A1A1A]">
+          <%= f.check_box :user_followed, class: "mt-1 w-5 h-5 text-cinematico-gold bg-cinematico-dark border-cinematico-grey rounded focus:ring-cinematico-gold" %>
+          <%= f.label :user_followed, class: "flex-1 text-cinematico-light" do %>
+            <span class="font-semibold block">New Followers</span>
+            <p class="text-sm text-cinematico-grey mt-1">Get notified when someone follows you</p>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-3">
+        <%= f.submit "Save Preferences", class: "px-6 py-3 bg-cinematico-gold text-cinematico-black font-semibold hover:bg-white transition cursor-pointer" %>
+        <%= link_to "Cancel", profile_path, class: "px-6 py-3 bg-cinematico-dark border border-cinematico-grey text-cinematico-light hover:border-cinematico-gold transition inline-block" %>
+      </div>
+    </div>
+  <% end %>
+</div>

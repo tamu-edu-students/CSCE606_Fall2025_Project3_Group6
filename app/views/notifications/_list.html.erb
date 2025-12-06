@@ -1,0 +1,36 @@
+<div class="space-y-3">
+  <% notifications.each do |n| %>
+    <div class="p-4 border border-[#8B7355] <%= n.unread? ? 'bg-[#1A1A1A] border-l-4 border-l-[#E8C07D]' : 'bg-[#0F0F0F]' %>">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+           <div class="text-sm">
+             <strong class="text-[#E8C07D]"><%= n.actor&.username || 'System' %></strong>
+           </div>
+          <% if n.body.present? %>
+            <div class="text-sm text-[#F5F5F5] mt-2"><%= n.body %></div>
+          <% end %>
+          <% if n.notifiable %>
+            <div class="text-xs text-[#CCCCCC] mt-2">
+              <% if n.notifiable.is_a?(Review) && n.notifiable.movie %>
+                <%= link_to "View review", movie_path(n.notifiable.movie), class: "text-[#E8C07D] hover:text-white underline transition" %>
+              <% elsif n.notifiable.is_a?(Movie) %>
+                <%= link_to "View movie", movie_path(n.notifiable), class: "text-[#E8C07D] hover:text-white underline transition" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="text-xs text-[#CCCCCC]">
+          <%= time_ago_in_words(n.created_at) %> ago
+          <% unless n.read? %>
+            <%= button_to "Mark read",
+              mark_read_notification_path(n),
+              method: :post,
+              data: { turbo_stream: true },
+              class: "ml-2 text-sm text-[#E8C07D] hover:text-white transition" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

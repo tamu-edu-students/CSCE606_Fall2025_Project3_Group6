@@ -23,8 +23,18 @@ class User < ApplicationRecord
   has_one :watchlist, dependent: :destroy
   has_one :watch_history, dependent: :destroy
 
+  # Notifications
+  # The notifications table historically used `user_id` as the recipient column.
+  has_many :notifications, foreign_key: (Notification.column_names.include?("recipient_id") ? :recipient_id : :user_id), dependent: :destroy
+  has_one :notification_preference, dependent: :destroy
+
   # Stats
   has_one :user_stat, dependent: :destroy
+
+  # ==================================================
+  # CALLBACKS
+  # ==================================================
+  after_create :create_default_notification_preference
 
   # ==================================================
   # VALIDATIONS
@@ -52,6 +62,14 @@ class User < ApplicationRecord
   end
 
   private
+
+  def create_default_notification_preference
+    create_notification_preference!(
+      review_created: true,
+      review_voted: true,
+      user_followed: true
+    )
+  end
 
   def password_complexity
     return if password.blank?

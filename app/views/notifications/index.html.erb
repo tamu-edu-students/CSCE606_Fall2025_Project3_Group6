@@ -1,0 +1,22 @@
+<div class="max-w-3xl mx-auto p-6">
+  <%= turbo_stream_from [current_user, :notifications] %>
+  <h1 class="font-cinzel text-4xl text-cinematico-gold mb-6">Notifications</h1>
+  
+  <noscript>
+    <div class="mb-4 p-3 border border-yellow-500 text-yellow-200 bg-[#1A1A1A] rounded">
+      ⚠️ When JavaScript is disabled, you need to refresh the page to see new notifications.
+    </div>
+  </noscript>
+
+  <div class="mb-6">
+    <%= button_to "Mark all read",
+      mark_all_read_notifications_path,
+      method: :post,
+      data: { turbo_stream: true },
+      class: "px-4 py-2 bg-[#E8C07D] text-black font-semibold hover:bg-white transition" %>
+  </div>
+
+  <turbo-frame id="notifications-list">
+    <%= render "notifications/list", notifications: @notifications %>
+  </turbo-frame>
+</div>

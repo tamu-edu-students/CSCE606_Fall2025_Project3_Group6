@@ -1,0 +1,65 @@
+<%# Use locals when rendered via Turbo streams (no request env) %>
+<% user_local = local_assigns[:user] || (defined?(current_user) ? current_user : nil) %>
+<% signed_in = if local_assigns.key?(:signed_in)
+                 local_assigns[:signed_in]
+               elsif defined?(user_signed_in?)
+                 user_signed_in?
+               else
+                 user_local.present?
+               end %>
+
+<div id="notifications-dropdown" data-controller="notifications" class="relative">
+  <%= link_to notifications_path, data: { action: "click->notifications#toggle" }, class: "relative" do %>
+    <!-- Bell icon -->
+    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+    <% if signed_in && user_local %>
+      <% unread_count = user_local.notifications.unread.count %>
+      <% if unread_count > 0 %>
+        <span class="absolute -top-1 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"><%= unread_count %></span>
+      <% end %>
+    <% end %>
+  <% end %>
+
+<div data-notifications-target="panel" class="hidden absolute right-0 mt-2 w-96 bg-[#0A0A0A] border border-[#8B7355] shadow-lg z-50">
+    <div class="p-4 bg-gradient-to-r from-[#0A0A0A] to-[#1A1A1A]">
+  <% if signed_in && user_local %>
+        <div class="flex items-center justify-between mb-3">
+          <strong class="font-cinzel text-2xl text-cinematico-gold font-bold">Notifications</strong>
+          <%= link_to 'View all', notifications_path, class: 'text-sm text-cinematico-gold hover:text-white transition' %>
+        </div>
+
+        <% recent = user_local.notifications.recent.limit(6) %>
+        <% if recent.any? %>
+          <ul class="space-y-2">
+            <% recent.each do |n| %>
+              <li class="p-3 <%= n.unread? ? 'bg-[#1A1A1A] border-l-4 border-cinematico-gold' : 'bg-[#0F0F0F]' %>">
+                <% if n.body.present? %>
+                <div class="text-sm text-[#E8C07D]"><strong><%= truncate(n.body, length: 80) %></strong></div>
+                <% end %>
+                <div class="text-xs text-cinematico-light mt-1 flex items-center justify-between">
+                  <span><%= time_ago_in_words(n.created_at) %> ago</span>
+                  <div class="space-x-2">
+                    <% if n.notifiable.is_a?(Review) && n.notifiable.movie %>
+                      <%= link_to "View", movie_path(n.notifiable.movie), class: "text-xs text-cinematico-gold hover:text-white underline transition" %>
+                    <% end %>
+                    <% unless n.read? %>
+                      <%= button_to "Mark read",
+                        mark_read_notification_path(n),
+                        method: :post,
+                        data: { turbo_stream: true },
+                        class: "text-xs text-cinematico-gold hover:text-white transition" %>
+                    <% end %>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <div class="text-sm text-cinematico-grey">No notifications</div>
+        <% end %>
+      <% else %>
+        <div class="p-3 text-sm text-cinematico-grey">Sign in to view notifications</div>
+      <% end %>
+    </div>
+  </div>
+</div>
