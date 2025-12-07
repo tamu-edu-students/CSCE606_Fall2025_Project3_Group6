@@ -57,7 +57,7 @@
                   <span class="text-cinematico-light">Unknown Movie (ID: <%= wh.movie_id %>)</span>
                 <% end %>
               </td>
-              <td class="py-3 text-cinematico-light"><%= format_date(wh.watched_on) %></td>
+              <td class="py-3 text-cinematico-light"><%= wh.watched_on&.strftime("%b %d, %Y") %></td>
               <td class="py-3">
                 <%= button_to "Remove", watch_history_path(wh), method: :delete, class: "px-3 py-1 bg-red-600 rounded text-white text-sm" %>
               </td>

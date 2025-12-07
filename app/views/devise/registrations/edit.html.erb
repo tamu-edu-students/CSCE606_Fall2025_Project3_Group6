@@ -1,0 +1,77 @@
+<div class="min-h-screen flex items-center justify-center p-6 app-shell">
+  <div class="glass-dark max-w-xl w-full p-10 relative z-10">
+
+    <h2 class="text-3xl font-cinzel text-center text-cinematico-gold mb-6">
+      Update Account
+    </h2>
+
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <%= form_for(resource,
+                 as: resource_name,
+                 url: registration_path(resource_name),
+                 html: { method: :put }) do |f| %>
+
+      <div class="space-y-4">
+        <div>
+          <%= f.label :email, class: "block text-cinematico-light mb-1" %>
+          <%= f.email_field :email, class: "w-full px-4 py-3 rounded-lg glass-thin text-white" %>
+        </div>
+
+        <div>
+          <%= f.label :username, class: "block text-cinematico-light mb-1" %>
+          <%= f.text_field :username, class: "w-full px-4 py-3 rounded-lg glass-thin text-white" %>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+          <div>
+            <%= f.label :password, "New password", class: "block text-cinematico-light mb-1" %>
+            <div class="relative">
+              <%= f.password_field :password, autocomplete: "new-password", class: "w-full px-4 py-3 rounded-lg glass-thin text-white pr-20", id: "user_password" %>
+              <button type="button" data-toggle-password="#user_password" class="absolute inset-y-0 right-2 px-3 text-sm text-cinematico-gold hover:text-white">Show</button>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">Leave blank to keep current password.</p>
+          </div>
+
+          <div>
+            <%= f.label :password_confirmation, "Confirm new password", class: "block text-cinematico-light mb-1" %>
+            <div class="relative">
+              <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full px-4 py-3 rounded-lg glass-thin text-white pr-20", id: "user_password_confirmation" %>
+              <button type="button" data-toggle-password="#user_password_confirmation" class="absolute inset-y-0 right-2 px-3 text-sm text-cinematico-gold hover:text-white">Show</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <%= f.label :current_password, class: "block text-cinematico-light mb-1" %>
+          <div class="relative">
+            <%= f.password_field :current_password, autocomplete: "current-password", class: "w-full px-4 py-3 rounded-lg glass-thin text-white pr-20", id: "user_current_password" %>
+            <button type="button" data-toggle-password="#user_current_password" class="absolute inset-y-0 right-2 px-3 text-sm text-cinematico-gold hover:text-white">Show</button>
+          </div>
+          <p class="text-xs text-gray-400 mt-1">Your current password is required to save changes.</p>
+        </div>
+      </div>
+
+      <%= f.submit "Save Changes",
+            class: "mt-8 w-full py-3 bg-cinematico-gold text-black font-semibold rounded-lg hover:opacity-90 transition" %>
+    <% end %>
+
+    <p class="mt-6 text-center">
+      <%= link_to "Back to profile", profile_path, class: "text-cinematico-gold hover:opacity-80 font-medium" %>
+    </p>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("turbo:load", () => {
+    document.querySelectorAll("[data-toggle-password]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const input = document.querySelector(btn.dataset.togglePassword);
+        if (!input) return;
+        const isHidden = input.type === "password";
+        input.type = isHidden ? "text" : "password";
+        btn.textContent = isHidden ? "Hide" : "Show";
+      });
+    });
+  });
+</script>

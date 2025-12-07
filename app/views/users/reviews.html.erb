@@ -1,0 +1,36 @@
+<div class="min-h-screen pt-24 px-6 pb-12">
+  <div class="max-w-5xl mx-auto space-y-6">
+    <div class="section-surface p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="font-cinzel text-3xl text-cinematico-gold"><%= @user.username %>'s Reviews</h1>
+          <p class="text-sm text-gray-400">All reviews by this user</p>
+        </div>
+        <%= link_to "Back to profile", public_profile_path(username: @user.username), class: "text-sm text-cinematico-gold hover:text-white" %>
+      </div>
+    </div>
+
+    <% if @reviews.any? %>
+      <div class="space-y-4">
+        <% @reviews.each do |review| %>
+          <div class="bg-cinematico-dark border border-gray-800 rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-white font-semibold text-sm md:text-base">
+                <%= link_to review.movie.title, movie_path(review.movie), class: "hover:text-cinematico-gold" %>
+              </h3>
+              <span class="px-2 py-0.5 bg-yellow-900/30 text-cinematico-gold text-xs font-bold rounded border border-yellow-900/50">★ <%= review.rating %></span>
+            </div>
+            <p class="text-xs text-gray-400 mb-2">Reviewed on <%= format_date(review.created_at) %></p>
+            <% if review.body.present? %>
+              <p class="text-sm text-gray-200"><%= review.body %></p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="section-surface p-6 text-center text-gray-300">
+        <p>No reviews yet.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

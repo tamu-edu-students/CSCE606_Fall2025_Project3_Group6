@@ -43,7 +43,7 @@ class User < ApplicationRecord
 
   validates :username,
             presence: true,
-            uniqueness: { case_sensitive: false },
+            uniqueness: { case_sensitive: false, message: "is already taken" },
             length: { minimum: 3, maximum: 20 },
             format: {
               with: /\A[a-zA-Z0-9_]+\z/,
@@ -67,7 +67,8 @@ class User < ApplicationRecord
     create_notification_preference!(
       review_created: true,
       review_voted: true,
-      user_followed: true
+      user_followed: true,
+      email_notifications: true
     )
   end
 

@@ -1,24 +1,44 @@
 <% content_for :title, "Stats Dashboard" %>
+<% content_for :head do %>
+  <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js",
+        crossorigin: "anonymous" %>
+<% end %>
 
-<div class="min-h-screen bg-[#0A0A0A] pt-24 px-6 pb-12">
-  <div class="max-w-7xl mx-auto space-y-8">
+<% stats_form_path = (@stats_user == current_user ? stats_path : public_stats_path(username: @stats_user.username)) %>
+
+<div class="min-h-screen app-shell pt-24 px-6 pb-12">
+  <div class="max-w-7xl mx-auto space-y-8 relative z-10 bg-gradient-to-br from-[#0a0b10] via-[#0f1118] to-[#0b0c12] rounded-2xl p-6 md:p-8">
 
     <!-- Page Header -->
-    <div class="text-center mb-8 space-y-3">
-      <h1 class="font-cinzel text-4xl md:text-5xl text-[#E8C07D] mb-2">Stats Dashboard</h1>
-      <p class="text-gray-300">Your cinematic journey in numbers</p>
-      <div class="flex flex-col items-center gap-2">
-        <% share_url = "#{request.base_url}#{stats_path}" %>
-        <label class="text-xs text-gray-400">Shareable Stats Link</label>
-        <div class="flex gap-2 w-full max-w-xl justify-center">
-          <input type="text" value="<%= share_url %>" readonly class="w-full bg-cinematico-dark border border-gray-700 rounded text-cinematico-light px-3 py-2 text-sm">
-          <button type="button" onclick="navigator.clipboard && navigator.clipboard.writeText('<%= share_url %>')" class="px-3 py-2 bg-[#E8C07D] text-black text-sm font-semibold rounded hover:bg-opacity-90">Copy</button>
+    <div class="mb-8 space-y-3">
+      <% if @stats_user %>
+        <% profile_link = (@stats_user == current_user ? profile_path : public_profile_path(username: @stats_user.username)) %>
+        <div class="flex justify-start">
+          <%= link_to "← Back to Profile", profile_link, class: "px-4 py-2 bg-white/10 border border-white/20 rounded text-cinematico-light hover:border-cinematico-gold hover:text-white transition", aria: { label: "Back to profile" } %>
         </div>
+      <% end %>
+      <div class="text-center space-y-3">
+        <h1 class="font-cinzel text-4xl md:text-5xl text-[#E8C07D] mb-2">Stats Dashboard</h1>
+        <p class="text-gray-300"><%= @stats_user&.username ? "#{@stats_user.username}'s cinematic journey" : "Your cinematic journey in numbers" %></p>
+        <% if @stats_user %>
+          <div class="flex flex-col items-center gap-2">
+            <% share_url = public_stats_url(username: @stats_user.username) %>
+            <label for="stats-share-link" class="text-sm text-gray-400">Shareable Stats Link</label>
+            <div class="flex gap-2 w-full max-w-xl justify-center items-center">
+              <input id="stats-share-link" type="text" value="<%= share_url %>" readonly class="w-full bg-cinematico-dark border border-gray-700 rounded text-cinematico-light px-3 py-2 text-sm" aria-label="Shareable stats link">
+              <button type="button"
+                    data-copy-target="#stats-share-link"
+                    data-copy-message="#stats-copy-msg"
+                    class="px-3 py-2 bg-[#E8C07D] text-black text-sm font-semibold rounded hover:bg-opacity-90">Copy</button>
+            <span id="stats-copy-msg" class="text-sm text-cinematico-gold hidden">Copied!</span>
+            </div>
+          </div>
+        <% end %>
       </div>
     </div>
 
     <!-- Stats Overview Section -->
-    <div class="glass p-8 md:p-10">
+    <div class="section-surface p-8 md:p-10">
       <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">Overview</h2>
       
       <% if @overview[:total_movies] > 0 %>
@@ -48,30 +68,12 @@
           <div class="mt-6">
             <h3 class="font-semibold text-white mb-4">Genre Breakdown</h3>
               <div class="bg-black/40 border border-gray-800 rounded-lg p-4">
-                <canvas id="genreChart" height="320" style="min-height: 320px;"></canvas>
-                <noscript>
-                  <div class="max-h-64 overflow-y-auto mt-4">
-                    <table class="w-full text-sm text-left text-cinematico-light">
-                      <thead class="sticky top-0 bg-black">
-                        <tr class="text-gray-400">
-                          <th class="py-2 pr-4">Genre</th>
-                          <th class="py-2">Movies</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% @overview[:genre_breakdown].first(12).each do |name, count| %>
-                          <tr class="border-t border-gray-800">
-                            <td class="py-2 pr-4"><%= name %></td>
-                            <td class="py-2"><%= count %></td>
-                          </tr>
-                        <% end %>
-                      </tbody>
-                    </table>
-                  </div>
-                </noscript>
+                <p class="sr-only" id="genre-chart-desc">Doughnut chart showing counts by genre.</p>
+                <canvas id="genreChart" height="320" style="min-height: 320px;" role="img" aria-label="Genre breakdown chart" aria-describedby="genre-chart-desc"></canvas>
               </div>
             </div>
         <% end %>
+
       <% else %>
         <div class="text-center py-12">
           <p class="text-gray-300 text-lg mb-4">Start logging movies to see your stats!</p>
@@ -81,9 +83,62 @@
       <% end %>
     </div>
 
-    <!-- Top Genres -->
+    <!-- History insights -->
     <% if @overview[:total_movies] > 0 %>
-      <div class="glass p-8 md:p-10">
+      <div class="section-surface p-8 md:p-10">
+        <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">History Insights</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-black/40 border border-gray-800 rounded-lg p-6 h-full">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold text-white">Most Watched Movies</h3>
+              <% if @most_watched.present? %>
+                <span class="text-sm text-gray-400">Sorted by rewatches</span>
+              <% end %>
+            </div>
+            <% if @most_watched.present? %>
+              <div class="space-y-3">
+                <% @most_watched.each do |entry| %>
+                  <div class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg p-3">
+                    <% if entry[:movie].poster_path.present? %>
+                      <%= image_tag entry[:movie].poster_url, alt: entry[:movie].title, class: "w-12 h-16 rounded object-cover border border-gray-800" %>
+                    <% else %>
+                      <div class="w-12 h-16 bg-gray-800 rounded flex items-center justify-center text-sm text-gray-500">N/A</div>
+                    <% end %>
+                    <div class="flex-1">
+                      <p class="text-white font-semibold text-sm"><%= entry[:movie].title %></p>
+                      <p class="text-gray-400 text-sm">Total watches: <%= entry[:watch_count] %></p>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-cinematico-gold text-sm font-bold">Rewatches: <%= entry[:rewatch_count] %></p>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-gray-400 text-sm">No watch activity yet.</p>
+            <% end %>
+          </div>
+
+          <div class="bg-black/40 border border-gray-800 rounded-lg p-6 h-full">
+            <h3 class="font-semibold text-white mb-4">Movies Watched by Decade</h3>
+            <% if @overview[:decade_breakdown].present? %>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <% @overview[:decade_breakdown].each do |decade, count| %>
+                  <div class="bg-white/5 border border-white/10 rounded-lg p-3 flex items-center justify-between">
+                    <span class="text-white text-sm font-semibold"><%= decade %></span>
+                    <span class="text-cinematico-gold text-sm font-bold"><%= count %></span>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-gray-400 text-sm">No data yet.</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Genres -->
+      <div class="section-surface p-8 md:p-10">
         <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">Top Genres</h2>
         <% if @top_contributors[:top_genres].present? %>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -103,7 +158,7 @@
       </div>
 
       <!-- Top Directors -->
-      <div class="glass p-8 md:p-10">
+      <div class="section-surface p-8 md:p-10">
         <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">Top Directors</h2>
         <% if @top_contributors[:top_directors].present? %>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -115,7 +170,7 @@
                     <% if director[:profile_path].present? %>
                       <%= image_tag TmdbService.poster_url(director[:profile_path]), alt: director[:name], class: "w-full h-full object-cover" %>
                     <% else %>
-                      <span class="text-xs text-gray-400">N/A</span>
+                      <span class="text-sm text-gray-400">N/A</span>
                     <% end %>
                   </div>
                   <span class="text-white text-sm truncate"><%= director[:name] %></span>
@@ -130,7 +185,7 @@
       </div>
 
       <!-- Top Actors -->
-      <div class="glass p-8 md:p-10">
+      <div class="section-surface p-8 md:p-10">
         <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">Top Actors</h2>
         <% if @top_contributors[:top_actors].present? %>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -142,7 +197,7 @@
                     <% if actor[:profile_path].present? %>
                       <%= image_tag TmdbService.poster_url(actor[:profile_path]), alt: actor[:name], class: "w-full h-full object-cover" %>
                     <% else %>
-                      <span class="text-xs text-gray-400">N/A</span>
+                      <span class="text-sm text-gray-400">N/A</span>
                     <% end %>
                   </div>
                   <span class="text-white text-sm truncate"><%= actor[:name] %></span>
@@ -157,114 +212,73 @@
       </div>
 
       <!-- Trend Charts Section -->
-      <div class="glass p-8 md:p-10">
-        <h2 class="font-cinzel text-2xl text-[#E8C07D] mb-6">Trends</h2>
-        
-        <% if @trend_data[:activity_trend].length > 0 || @trend_data[:rating_trend].length > 0 %>
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Activity Trend Chart -->
-            <div>
-              <h3 class="font-semibold text-white mb-4">Watching Activity Over Time</h3>
-              <div class="bg-black/40 border border-gray-800 rounded-lg p-4">
-                <canvas id="activityChart" height="250"></canvas>
-                <noscript>
-                  <div class="max-h-64 overflow-y-auto mt-4">
-                    <table class="w-full text-sm text-left text-cinematico-light">
-                      <thead class="sticky top-0 bg-black">
-                        <tr class="text-gray-400">
-                          <th class="py-2 pr-4">Month</th>
-                          <th class="py-2">Movies Watched</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% @trend_data[:activity_trend].each do |row| %>
-                          <tr class="border-t border-gray-800">
-                            <td class="py-2 pr-4"><%= row[:month] %></td>
-                            <td class="py-2"><%= row[:count] %></td>
-                          </tr>
-                        <% end %>
-                      </tbody>
-                    </table>
-                  </div>
-                </noscript>
-          </div>
+      <div class="section-surface p-8 md:p-10">
+        <div class="flex items-center justify-between flex-wrap gap-3 mb-6">
+          <h2 class="font-cinzel text-2xl text-[#E8C07D]">Trends</h2>
+          <% if @trend_years.present? %>
+            <%= form_with url: stats_form_path, method: :get, local: true, class: "flex items-center gap-2" do %>
+              <%= hidden_field_tag :heatmap_year, @heatmap_year %>
+              <label for="trend_year" class="text-sm text-gray-300">Year</label>
+              <%= select_tag :trend_year,
+                options_for_select(@trend_years, @trend_year),
+                class: "bg-cinematico-dark text-cinematico-light text-sm rounded border border-gray-700 px-3 py-2 focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold cursor-pointer",
+                style: "background-color: #0b0b0f; color: #e5e5e5;" %>
+              <%= submit_tag "Go", class: "px-3 py-2 bg-cinematico-gold text-black text-sm font-semibold rounded hover:bg-opacity-90 cursor-pointer" %>
+            <% end %>
+          <% end %>
         </div>
-
-            <!-- Rating Trend Chart -->
-            <div>
-              <h3 class="font-semibold text-white mb-4">Average Rating Over Time</h3>
-              <div class="bg-black/40 border border-gray-800 rounded-lg p-4 min-h-[280px] flex items-center justify-center">
-                <% if @trend_data[:rating_trend].present? && @trend_data[:rating_trend].any? %>
-                  <canvas id="ratingChart" height="250"></canvas>
-                  <noscript>
-                    <div class="max-h-64 overflow-y-auto mt-4 w-full">
-                      <table class="w-full text-sm text-left text-cinematico-light">
-                        <thead class="sticky top-0 bg-black">
-                          <tr class="text-gray-400">
-                            <th class="py-2 pr-4">Month</th>
-                            <th class="py-2">Average Rating</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <% @trend_data[:rating_trend].each do |row| %>
-                            <tr class="border-t border-gray-800">
-                              <td class="py-2 pr-4"><%= row[:month] %></td>
-                              <td class="py-2"><%= row[:average_rating] %></td>
-                            </tr>
-                          <% end %>
-                        </tbody>
-                      </table>
-                    </div>
-                  </noscript>
-                <% else %>
-                  <p class="text-cinematico-light text-sm">Not enough data.</p>
-                <% end %>
-              </div>
+        
+        <% activity_sum = @trend_data[:activity_trend].sum { |row| row[:count].to_i } rescue 0 %>
+        <% rating_present = @trend_data[:rating_trend].present? && @trend_data[:rating_trend].any? %>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Activity Trend Chart -->
+          <div>
+            <h3 class="font-semibold text-white mb-4">Watching Activity Over Time</h3>
+            <div class="bg-black/40 border border-gray-800 rounded-lg p-4 min-h-[280px] flex items-center justify-center">
+              <% if activity_sum > 0 %>
+                <p class="sr-only" id="activity-chart-desc">Line chart of movies watched by month.</p>
+                <canvas id="activityChart" height="250" role="img" aria-label="Watching activity over time" aria-describedby="activity-chart-desc"></canvas>
+              <% else %>
+                <p class="text-gray-400 text-sm text-center">No movies watched this year.</p>
+              <% end %>
             </div>
           </div>
-        <% else %>
-          <p class="text-gray-400 text-center py-8">Not enough data to display trends. Keep logging movies!</p>
-        <% end %>
+
+          <!-- Rating Trend Chart -->
+          <div>
+            <h3 class="font-semibold text-white mb-4">Average Rating Over Time</h3>
+            <div class="bg-black/40 border border-gray-800 rounded-lg p-4 min-h-[280px] flex items-center justify-center">
+              <% if rating_present %>
+                <p class="sr-only" id="rating-chart-desc">Line chart of average ratings by month.</p>
+                <canvas id="ratingChart" height="250" role="img" aria-label="Average rating over time" aria-describedby="rating-chart-desc"></canvas>
+              <% else %>
+                <p class="text-cinematico-light text-sm text-center">Not enough data.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Heatmap Activity Section -->
-      <div class="glass p-8 md:p-10">
+      <div class="section-surface p-8 md:p-10">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-2">
           <h2 class="font-cinzel text-2xl text-[#E8C07D]">Activity Heatmap</h2>
           <% if @heatmap_years.present? %>
-            <%= form_with url: stats_path, method: :get, local: true, class: "flex items-center gap-2" do %>
+            <%= form_with url: stats_form_path, method: :get, local: true, class: "flex items-center gap-2" do %>
+              <%= hidden_field_tag :trend_year, @trend_year %>
               <label for="heatmap_year" class="text-sm text-gray-300">Year</label>
               <%= select_tag :heatmap_year,
                 options_for_select(@heatmap_years, @heatmap_year),
                 class: "bg-cinematico-dark text-cinematico-light text-sm rounded border border-gray-700 px-3 py-2 focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold cursor-pointer",
-                onchange: "this.form.submit()" %>
+                style: "background-color: #0b0b0f; color: #e5e5e5;" %>
+              <%= submit_tag "Go", class: "px-3 py-2 bg-cinematico-gold text-black text-sm font-semibold rounded hover:bg-opacity-90 cursor-pointer" %>
             <% end %>
           <% end %>
         </div>
         
         <% if @heatmap_data.present? && @heatmap_data.values.any? { |v| v > 0 } %>
           <div class="bg-black/40 border border-gray-800 rounded-lg p-6 overflow-x-auto">
-            <div id="heatmap" class="heatmap-container"></div>
-            <noscript>
-              <div class="max-h-64 overflow-y-auto mt-4">
-                <table class="w-full text-sm text-left text-cinematico-light">
-                  <thead class="sticky top-0 bg-black">
-                    <tr class="text-gray-400">
-                      <th class="py-2 pr-4">Date</th>
-                      <th class="py-2">Movies Logged</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% @heatmap_data.sort_by { |date, _| date }.each do |date, count| %>
-                      <tr class="border-t border-gray-800">
-                        <td class="py-2 pr-4"><%= date %></td>
-                        <td class="py-2"><%= count %></td>
-                      </tr>
-                    <% end %>
-                  </tbody>
-                </table>
-              </div>
-            </noscript>
+            <div id="heatmap" class="heatmap-container" role="img" aria-label="Activity heatmap for <%= @heatmap_year %>"></div>
           </div>
         <% else %>
           <p class="text-gray-400 text-center py-8">No activity data to display for <%= @heatmap_year %>. Try another year.</p>
@@ -274,9 +288,6 @@
 
   </div>
 </div>
-
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" data-turbo-track="reload"></script>
 
 <script>
   (function() {
@@ -289,7 +300,11 @@
           new Chart(activityCtx, {
             type: 'line',
             data: {
-              labels: activityData.map(item => item.month),
+              labels: activityData.map(item => {
+                const [year, month] = item.month.split("-");
+                const date = new Date(parseInt(year, 10), parseInt(month, 10) - 1, 1);
+                return date.toLocaleString(undefined, { month: "short", year: "numeric" });
+              }),
               datasets: [{
                 label: 'Movies Watched',
                 data: activityData.map(item => item.count),
@@ -333,7 +348,11 @@
           new Chart(ratingCtx, {
             type: 'line',
             data: {
-              labels: ratingData.map(item => item.month),
+              labels: ratingData.map(item => {
+                const [year, month] = item.month.split("-");
+                const date = new Date(parseInt(year, 10), parseInt(month, 10) - 1, 1);
+                return date.toLocaleString(undefined, { month: "short", year: "numeric" });
+              }),
               datasets: [{
                 label: 'Average Rating',
                 data: ratingData.map(item => item.average_rating),
@@ -430,7 +449,7 @@
           html += '<div class="flex gap-1">';
           html += '<div class="flex flex-col gap-1 mr-2 flex-shrink-0 sticky left-0 bg-[#0A0A0A] z-10">';
           ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
-            html += `<div class="h-4 text-xs text-gray-400" style="line-height: 16px;">${day}</div>`;
+            html += `<div class="h-4 text-sm text-gray-200" style="line-height: 16px;">${day}</div>`;
           });
           html += '</div>';
           
@@ -472,29 +491,32 @@
           if (!ctx || typeof Chart === "undefined" || ctx.dataset.rendered) return;
 
           const genreEntries = <%= @overview[:genre_breakdown].first(12).map { |name, count| { name: name, count: count } }.to_json.html_safe %>;
+
           new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
               labels: genreEntries.map(g => g.name),
               datasets: [{
                 label: 'Movies',
                 data: genreEntries.map(g => g.count),
                 backgroundColor: [
-                  'rgba(232, 192, 125, 0.85)',
-                  'rgba(255, 214, 165, 0.8)',
-                  'rgba(244, 162, 97, 0.8)',
-                  'rgba(233, 196, 106, 0.8)',
-                  'rgba(42, 157, 143, 0.8)',
-                  'rgba(84, 138, 180, 0.8)',
-                  'rgba(94, 103, 164, 0.8)',
-                  'rgba(168, 218, 220, 0.8)',
-                  'rgba(69, 123, 157, 0.8)',
-                  'rgba(230, 111, 81, 0.8)',
-                  'rgba(190, 99, 135, 0.8)',
-                  'rgba(149, 82, 81, 0.8)'
+                  'rgba(255, 215, 115, 0.95)',
+                  'rgba(255, 168, 88, 0.95)',
+                  'rgba(255, 119, 102, 0.95)',
+                  'rgba(90, 200, 250, 0.95)',
+                  'rgba(135, 196, 68, 0.95)',
+                  'rgba(167, 126, 255, 0.95)',
+                  'rgba(255, 116, 181, 0.95)',
+                  'rgba(255, 239, 135, 0.95)',
+                  'rgba(86, 214, 174, 0.95)',
+                  'rgba(255, 148, 114, 0.95)',
+                  'rgba(130, 222, 255, 0.95)',
+                  'rgba(255, 193, 7, 0.95)'
                 ],
                 borderColor: '#0A0A0A',
-                borderWidth: 1
+                borderWidth: 2,
+                hoverOffset: 16,
+                cutout: '30%'
               }]
             },
             options: {

@@ -1,162 +1,225 @@
 <div class="min-h-screen flex flex-col">
   <% if user_signed_in? %>
-    <div class="pt-24 px-6 pb-12 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <div class="lg:col-span-2">
-        <h2 class="font-cinzel text-3xl text-cinematico-gold mb-8">Activity Feed</h2>
+    <div class="feed-shell">
+      <div class="absolute inset-0 feed-overlay"></div>
+      <div class="relative pt-24 px-6 pb-16 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div class="lg:col-span-2 space-y-6">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <p class="text-xs uppercase tracking-sub text-gray-500">Your circle</p>
+              <h2 class="font-cinzel text-3xl text-cinematico-gold">Activity Feed</h2>
+            </div>
+            <div class="badge-soft">Live updates</div>
+          </div>
+
         <% if @activities.present? %>
           <div class="space-y-6">
             <% @activities.each do |activity| %>
-              <div class="glass p-6 rounded-lg border border-white/10 shadow-lg">
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="w-10 h-10 bg-cinematico-gold rounded-full flex items-center justify-center text-cinematico-black font-bold">
-                    <%= activity.user.username ? activity.user.username[0].upcase : (activity.user.email[0].upcase rescue 'U') %>
-                  </div>
-                  <div>
-                    <p class="text-white font-bold">
-                      <%= link_to (activity.user.username || activity.user.email), user_path(activity.user), class: "hover:text-cinematico-gold transition" %>
-                    </p>
-                    <p class="text-xs text-gray-400">
-                      <% if activity.is_a?(Review) %>
-                        reviewed <%= link_to activity.movie.title, movie_path(activity.movie), class: "text-cinematico-gold hover:underline" %>
-                      <% elsif activity.class.name == 'Log' %>
-                        watched <%= link_to activity.movie.title, movie_path(activity.movie), class: "text-cinematico-gold hover:underline" %>
-                      <% end %>
-                      • <%= time_ago_in_words(activity.created_at) %> ago
-                    </p>
-                  </div>
-                </div>
-                
-                <% if activity.is_a?(Review) %>
-                  <div class="pl-14">
-                    <div class="flex items-center gap-2 mb-2">
-                      <span class="text-cinematico-gold font-bold text-sm">★ <%= activity.rating %></span>
+              <% activity_user = activity.respond_to?(:user) ? activity.user : (activity.respond_to?(:watch_history) ? activity.watch_history&.user : nil) %>
+              <div class="feed-card p-6 relative z-10">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex items-start gap-4">
+                    <div class="w-11 h-11 bg-cinematico-gold rounded-full flex items-center justify-center text-cinematico-black font-bold shadow-md">
+                      <%= activity_user&.username ? activity_user.username[0].upcase : (activity_user&.email&.first&.upcase || 'U') %>
                     </div>
-                    <p class="text-gray-200 text-sm leading-relaxed"><%= activity.body %></p>
+                    <div>
+                      <p class="text-white font-semibold">
+                        <% if activity_user %>
+                          <%= link_to (activity_user.username || activity_user.email), user_path(activity_user), class: "hover:text-cinematico-gold transition" %>
+                        <% else %>
+                          Unknown User
+                        <% end %>
+                      </p>
+                      <p class="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                          <% if activity.is_a?(Review) %>
+                            <span class="badge-soft">Review</span>
+                            <span>reviewed <%= link_to activity.movie.title, movie_path(activity.movie), class: "text-cinematico-gold hover:underline" %></span>
+                          <% elsif activity.is_a?(Log) || activity.is_a?(WatchLog) %>
+                            <span class="badge-soft">Watch</span>
+                            <span>watched <%= link_to activity.movie.title, movie_path(activity.movie), class: "text-cinematico-gold hover:underline" %></span>
+                          <% elsif activity.is_a?(Vote) %>
+                            <% vote_type = activity.value == 1 ? "upvoted" : "downvoted" %>
+                            <% review = activity.review %>
+                            <span class="badge-soft">Vote</span>
+                            <span>
+                              <%= vote_type %> a review for <%= link_to review.movie.title, movie_path(review.movie), class: "text-cinematico-gold hover:underline" %>
+                              by <%= link_to review.user.username, user_path(review.user), class: "text-cinematico-gold hover:underline" %>
+                            </span>
+                          <% elsif activity.is_a?(Follow) %>
+                            <span class="badge-soft">Follow</span>
+                            <span>followed <%= link_to activity.followed.username, user_path(activity.followed), class: "text-cinematico-gold hover:underline" %></span>
+                          <% end %>
+                      </p>
+                    </div>
                   </div>
-                <% elsif activity.class.name == 'Log' %>
-                   <div class="pl-14">
-                     <span class="text-cinematico-gold font-bold text-sm">Rated: <%= activity.rating %>/10</span>
-                   </div>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
-        <% else %>
-          <div class="glass p-12 rounded-lg border border-white/10 text-center">
-            <h3 class="text-xl text-white mb-2">Your feed is empty</h3>
-            <p class="text-gray-400 mb-6">Follow other cinephiles to see their activity here.</p>
-          </div>
-        <% end %>
-      </div>
+                    <p class="text-xs text-gray-500"><%= time_ago_in_words(activity.created_at) %> ago</p>
+                  </div>
 
-      <div>
-        <h2 class="font-cinzel text-xl text-white mb-6">Trending Now</h2>
-        <div class="space-y-4">
-          <% @trending_movies.each do |movie| %>
-            <%= link_to movie_path(movie), class: "flex gap-4 group glass p-3 rounded-lg border border-white/5 hover:border-cinematico-gold/30 transition" do %>
-              <% if movie.poster_path %>
-                <%= image_tag movie.poster_url, class: "w-16 h-24 object-cover rounded shadow-md" %>
-              <% else %>
-                 <div class="w-16 h-24 bg-gray-800 rounded flex items-center justify-center text-xs text-gray-500">No Poster</div>
+                  <% if activity.is_a?(Review) %>
+                    <div class="mt-4 pl-15">
+                      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-cinematico-gold text-sm font-semibold">
+                        ★ <%= activity.rating %>
+                      </div>
+                      <p class="text-gray-200 text-sm leading-relaxed mt-3"><%= activity.body %></p>
+                    </div>
+                  <% elsif activity.class.name == 'Log' %>
+                    <div class="mt-4 pl-15">
+                      <span class="text-cinematico-gold font-semibold text-sm">Watched <%= activity.movie.title %></span>
+                    </div>
+                  <% elsif activity.is_a?(Vote) %>
+                    <% review = activity.review %>
+                    <div class="mt-4 pl-15 space-y-2">
+                      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-cinematico-gold text-sm font-semibold">
+                        Review Rating: <%= review.rating %>
+                      </div>
+                      <% if review.body.present? %>
+                        <p class="text-gray-200 text-sm leading-relaxed line-clamp-3"><%= review.body %></p>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
               <% end %>
-              <div class="flex flex-col justify-center">
-                <h4 class="text-gray-200 font-bold group-hover:text-cinematico-gold transition line-clamp-2"><%= movie.title %></h4>
-                <p class="text-xs text-gray-500 mt-1"><%= format_date(movie.release_date) %></p>
+              <% if @total_pages && @total_pages > 1 %>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-300 mt-6 gap-3">
+                <div class="text-center sm:text-left">Page <%= @page %> of <%= @total_pages %></div>
+                <div class="flex gap-2 justify-center sm:justify-end">
+                  <% if @page > 1 %>
+                    <%= link_to "Previous", root_path(page: @page - 1), class: "px-3 py-1 bg-white/5 border border-white/10 rounded hover:border-cinematico-gold" %>
+                  <% end %>
+                  <% if @page < @total_pages %>
+                    <%= link_to "Next", root_path(page: @page + 1), class: "px-3 py-1 bg-white/5 border border-white/10 rounded hover:border-cinematico-gold" %>
+                  <% end %>
+                </div>
               </div>
             <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  <% else %>
-    <section class="pt-40 pb-32 px-6 text-center text-white glass-dark max-w-7xl mx-auto mt-20">
-      <h1 class="font-cinzel text-6xl md:text-7xl font-bold text-cinematico-gold tracking-wide">
-        CINEMATICO
-      </h1>
-
-      <p class="mt-6 text-xl text-cinematico-light font-inter max-w-2xl mx-auto">
-        Made for the endlessly curious cinephile
-      </p>
-
-      <div class="mt-10 flex justify-center gap-4">
-        <%= link_to "Get Started",
-          new_user_registration_path,
-          class: "px-8 py-4 bg-cinematico-gold text-black font-semibold rounded-lg hover:opacity-90 transition" %>
-      </div>
-    </section>
-
-
-    <section class="py-28 px-6">
-      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-white">
-      <div class="glass p-6 rounded-xl border border-white/10">
-        <h3 class="text-white font-semibold text-lg mb-2">Track Your Movies</h3>
-        <p class="text-gray-300 text-sm">Log films with one click.</p>
-      </div>
-
-      <div class="glass p-6 rounded-xl border border-white/10">
-        <h3 class="text-white font-semibold text-lg mb-2">Deep Viewing Stats</h3>
-        <p class="text-gray-300 text-sm">Genres, decades, directors & more.</p>
-      </div>
-
-      <div class="glass p-6 rounded-xl border border-white/10">
-        <h3 class="text-white font-semibold text-lg mb-2">Review Reactions</h3>
-        <p class="text-gray-300 text-sm">Upvotes & downvotes, no clutter.</p>
-      </div>
-
-      <div class="glass p-6 rounded-xl border border-white/10">
-        <h3 class="text-white font-semibold text-lg mb-2">Smart Recommendations</h3>
-        <p class="text-gray-300 text-sm">Powered by your unique taste.</p>
-      </div>
-
-
-      </div>
-    </section>
-
-
-    <section class="py-24 px-6 glass-thin max-w-7xl mx-auto text-white">
-      <h2 class="font-cinzel text-4xl text-center mb-12">Trending Among Cinephiles</h2>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mx-auto">
-        <% if @trending_movies %>
-          <% @trending_movies.each do |movie| %>
-            <%= link_to movie_path(movie), class: "group block" do %>
-              <div class="aspect-[2/3] bg-gray-800 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.4)] relative">
-                <% if movie.poster_path %>
-                  <%= image_tag movie.poster_url, class: "w-full h-full object-cover group-hover:scale-105 transition duration-500" %>
-                <% end %>
-              </div>
-              <p class="mt-3 text-sm font-medium text-cinematico-light group-hover:text-cinematico-gold transition"><%= movie.title %></p>
-            <% end %>
-          <% end %>
-        <% else %>
-          <% 8.times do %>
-            <div>
-              <div class="aspect-[2/3] bg-[rgba(255,255,255,0.08)] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]"></div>
-              <p class="mt-3 text-sm font-medium text-cinematico-light">Movie Title</p>
+            </div>
+          <% else %>
+            <div class="feed-card p-12 text-center">
+              <h3 class="text-xl text-white mb-2">Your feed is empty</h3>
+              <p class="text-gray-400 mb-6">Follow other cinephiles to see their activity here.</p>
+              <%= link_to "Browse Movies", movies_path, class: "px-6 py-2 bg-cinematico-gold text-black font-semibold rounded-lg hover:opacity-90 transition" %>
             </div>
           <% end %>
+        </div>
+
+        <div class="space-y-4">
+          <div class="feed-card p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="font-cinzel text-xl text-white">Trending Now</h2>
+              <span class="text-xs text-gray-500">Popular this week</span>
+            </div>
+            <div class="space-y-4">
+              <% @trending_movies.each do |movie| %>
+                <%= link_to movie_path(movie), class: "flex gap-4 group p-3 rounded-lg border border-white/5 hover:border-cinematico-gold/40 transition bg-white/5" do %>
+                  <% if movie.poster_path %>
+                    <%= image_tag movie.poster_url, alt: "#{movie.title} poster", class: "w-14 h-20 object-cover rounded shadow-md" %>
+                  <% else %>
+                    <div class="w-14 h-20 bg-gray-800 rounded flex items-center justify-center text-xs text-gray-500">No Poster</div>
+                  <% end %>
+                  <div class="flex flex-col justify-center">
+                    <h4 class="text-gray-200 font-bold group-hover:text-cinematico-gold transition line-clamp-2"><%= movie.title %></h4>
+                    <p class="text-xs text-gray-500 mt-1"><%= format_date(movie.release_date) %></p>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+            </div>
+          </div>
+        <% else %>
+    <section class="relative overflow-hidden landing-hero">
+      <div class="absolute inset-0 landing-hero-overlay"></div>
+      <div class="max-w-7xl mx-auto px-6 pt-32 pb-28 text-center text-white relative z-10 space-y-8">
+        <p class="uppercase tracking-hero text-xs text-gray-400">For the endlessly curious cinephile</p>
+        <h1 class="font-cinzel text-5xl md:text-6xl font-bold text-cinematico-gold hero-title-shadow">CINEMATICO</h1>
+        <p class="text-lg md:text-xl text-cinematico-light max-w-3xl mx-auto leading-relaxed">
+          Track every film, surface deep insights, and share your taste with a community that cares about cinema.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <%= link_to "Get Started", new_user_registration_path, class: "px-8 py-3 bg-cinematico-gold text-black font-semibold rounded-lg hover:opacity-90 transition shadow-lg cta-gold-shadow" %>
+          <%= link_to "Browse Movies", movies_path, class: "px-8 py-3 border border-cinematico-gold text-cinematico-gold font-semibold rounded-lg hover:bg-cinematico-gold hover:text-black transition" %>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 px-6 section-shadow border-y border-white/5">
+      <div class="max-w-6xl mx-auto section-surface p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-white">
+        <% features = [
+          { title: "Track Your Movies", copy: "Log every watch with one tap, across devices.", icon: "🎬" },
+          { title: "Deep Viewing Stats", copy: "Genres, decades, directors, and time spent—beautifully visualized.", icon: "📊" },
+          { title: "Review Reactions", copy: "See how your takes land with simple, clean feedback.", icon: "⭐" },
+          { title: "Smart Recommendations", copy: "Taste-aware picks powered by what you actually watch.", icon: "✨" }
+        ] %>
+
+        <% features.each do |feature| %>
+          <div class="glass p-6 rounded-xl border border-white/10 hover:border-cinematico-gold/40 transition group">
+            <div class="text-2xl mb-3"><%= feature[:icon] %></div>
+            <h3 class="text-white font-semibold text-lg mb-2 group-hover:text-cinematico-gold transition"><%= feature[:title] %></h3>
+            <p class="text-gray-300 text-sm leading-relaxed"><%= feature[:copy] %></p>
+          </div>
         <% end %>
       </div>
     </section>
 
-
-    <section class="py-24 px-6 text-white glass max-w-5xl mx-auto text-center">
-      <h2 class="font-cinzel text-4xl mb-12">How It Works</h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-        <div>
-          <div class="step-circle">1</div>
-          <p class="mt-4 font-semibold text-xl">Create Profile</p>
+    <section class="py-24 px-6 section-deep text-white">
+      <div class="max-w-7xl mx-auto section-surface p-8">
+        <div class="flex items-center justify-between flex-wrap gap-4 mb-10">
+          <div>
+            <p class="text-xs uppercase tracking-sub text-gray-500">Now trending</p>
+            <h2 class="font-cinzel text-4xl text-cinematico-gold">Among Cinephiles</h2>
+          </div>
+          <%= link_to "View all", movies_path, class: "text-sm text-cinematico-gold hover:text-white transition" %>
         </div>
 
-        <div>
-          <div class="step-circle">2</div>
-          <p class="mt-4 font-semibold text-xl">Add Films</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          <% if @trending_movies %>
+              <% @trending_movies.each do |movie| %>
+                <%= link_to movie_path(movie), class: "group block" do %>
+                  <div class="aspect-poster rounded-xl overflow-hidden bg-gray-800 card-deep-shadow relative">
+                    <% if movie.poster_path %>
+                      <%= image_tag movie.poster_url, alt: "#{movie.title} poster", class: "w-full h-full object-cover group-hover:scale-105 transition duration-500" %>
+                    <% else %>
+                      <div class="w-full h-full flex items-center justify-center text-gray-500">No Poster</div>
+                    <% end %>
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+                </div>
+                <p class="mt-3 text-sm font-medium text-cinematico-light group-hover:text-cinematico-gold transition line-clamp-2"><%= movie.title %></p>
+                <p class="text-xs text-gray-500"><%= format_date(movie.release_date) %></p>
+              <% end %>
+            <% end %>
+          <% else %>
+            <% 8.times do %>
+              <div class="animate-pulse">
+                <div class="aspect-poster bg-white/10 rounded-xl"></div>
+                <p class="mt-3 text-sm font-medium text-cinematico-light">Movie Title</p>
+              </div>
+            <% end %>
+          <% end %>
         </div>
+      </div>
+    </section>
 
+    <section class="py-24 px-6 text-white section-shadow">
+      <div class="max-w-5xl mx-auto section-surface p-8 text-center space-y-10">
         <div>
-          <div class="step-circle">3</div>
-          <p class="mt-4 font-semibold text-xl">View Insights</p>
+          <p class="text-xs uppercase tracking-sub text-gray-500">Simple steps</p>
+          <h2 class="font-cinzel text-4xl text-cinematico-gold">How It Works</h2>
+          <p class="text-sm text-gray-400 mt-3">From signup to insights in three moves.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <% steps = [
+            { num: "1", title: "Create Profile", copy: "Join the community and set your privacy." },
+            { num: "2", title: "Add Films", copy: "Log watches and share quick takes." },
+            { num: "3", title: "View Insights", copy: "See trends, heatmaps, and your cine-DNA." }
+          ] %>
+          <% steps.each do |step| %>
+            <div class="glass p-6 rounded-xl border border-white/10">
+              <div class="w-12 h-12 rounded-full bg-cinematico-gold text-black flex items-center justify-center text-lg font-bold mx-auto"><%= step[:num] %></div>
+              <p class="mt-4 font-semibold text-xl"><%= step[:title] %></p>
+              <p class="mt-2 text-sm text-gray-300 leading-relaxed"><%= step[:copy] %></p>
+            </div>
+          <% end %>
         </div>
       </div>
     </section>

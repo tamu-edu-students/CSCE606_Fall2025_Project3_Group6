@@ -6,10 +6,9 @@ class ApplicationController < ActionController::Base
 
   protected
 
-    # Send users to the movies listing after sign in/sign up to drop them
-    # straight into the core experience.
+    # Send users to the activity feed after sign in/sign up.
     def after_sign_in_path_for(_resource)
-      movies_path
+      root_path
     end
 
     def after_sign_out_path_for(_resource_or_scope)

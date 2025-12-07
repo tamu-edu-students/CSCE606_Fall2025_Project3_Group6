@@ -16,14 +16,10 @@ class UsersController < ApplicationController
       return
     end
 
+    @is_current_user = current_user == @user
     @stats = @user.user_stat if @user.respond_to?(:user_stat)
+    @lists = @is_current_user ? @user.lists : @user.lists.where(public: true)
     @recent_reviews = @user.reviews.includes(:movie).by_date.limit(5)
-
-    if current_user == @user
-      @lists = @user.lists
-    else
-      @lists = @user.lists.where(public: true)
-    end
   end
 
   def public_profile
@@ -35,16 +31,17 @@ class UsersController < ApplicationController
       return
     end
 
+    @is_current_user = current_user == @user
     @stats = @user.user_stat if @user.respond_to?(:user_stat)
     @recent_reviews = @user.reviews.includes(:movie).by_date.limit(5)
-
-    if current_user == @user
-      @lists = @user.lists
-    else
-      @lists = @user.lists.where(public: true)
-    end
+    @lists = @user.lists.where(public: true)
 
     render :show
+  end
+
+  def settings
+    @user = current_user
+    @following = current_user.followed_users.includes(:followers, :followed_users)
   end
 
   def edit
@@ -64,5 +61,16 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:username, :profile_public)
+  end
+
+  public
+
+  def reviews
+    @user = User.find_by!(username: params[:username])
+    if @user != current_user && @user.profile_public == false
+      redirect_to root_path, alert: "This profile is private."
+      return
+    end
+    @reviews = @user.reviews.includes(:movie).order(created_at: :desc)
   end
 end

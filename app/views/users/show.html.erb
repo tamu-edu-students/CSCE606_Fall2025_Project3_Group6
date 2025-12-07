@@ -1,128 +1,112 @@
-<div class="min-h-screen bg-cinematico-black pt-24 px-6 pb-12">
-  <div class="max-w-5xl mx-auto space-y-10">
-
-    <div class="glass p-8 md:p-10">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-
-        <div class="flex flex-col items-center md:items-start gap-4">
-          <div class="h-20 w-20 rounded-full bg-cinematico-gold text-cinematico-black flex items-center justify-center text-3xl font-bold">
-            <%= @user.username.to_s.first&.upcase || "U" %>
-          </div>
-
-          <div class="text-center md:text-left">
-            <h1 class="font-cinzel text-3xl text-white mb-1"><%= @user.username %></h1>
-            <p class="text-sm text-gray-300"><%= @user.email %></p>
-            <p class="text-xs text-cinematico-gold mt-1">
-              <%= @user.followers.count %> Followers • <%= @user.followed_users.count %> Following
-            </p>
-          </div>
-
-          <div class="flex flex-wrap gap-3 text-xs text-gray-300 mt-2">
-            <span class="px-3 py-1 rounded-full border border-gray-700 bg-black/40">
-              <strong class="font-semibold">Profile:</strong>
-              <%= @user.profile_public ? "Public" : "Private" %>
-            </span>
-            <span class="px-3 py-1 rounded-full border border-gray-700 bg-black/40">
-              Joined <%= format_date(@user.created_at) %>
-            </span>
-          </div>
-
-          <div class="flex flex-wrap gap-3 mt-4">
-            <% if user_signed_in? %>
-              <% if current_user == @user %>
-                <%= link_to "Edit Profile", settings_profile_path,
-                  class: "px-4 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded-lg hover:bg-opacity-90 transition" %>
-                <%= link_to "My Reviews", my_reviews_path,
-                  class: "px-4 py-2 border border-gray-700 text-gray-200 text-sm rounded-lg hover:border-cinematico-gold hover:text-cinematico-gold transition" %>
-              <% else %>
-                <% if current_user.following?(@user) %>
-                  <%= button_to "Unfollow", user_follow_path(@user), method: :delete, 
-                      class: "px-4 py-2 border border-cinematico-gold text-cinematico-gold text-sm font-semibold rounded-lg hover:bg-cinematico-gold hover:text-cinematico-black transition" %>
-                <% else %>
-                  <%= button_to "Follow", user_follow_path(@user), method: :post, 
-                      class: "px-4 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded-lg hover:bg-opacity-90 transition" %>
-                <% end %>
-              <% end %>
-            <% end %>
+<div class="min-h-screen pt-24 px-6 pb-12">
+  <div class="max-w-6xl mx-auto space-y-10 relative z-10">
+    <div class="section-surface p-8 md:p-10">
+      <div class="flex flex-col md:flex-row md:items-start gap-8">
+        <div class="flex-1 space-y-4">
+          <div class="flex items-center gap-4">
+            <div class="h-16 w-16 md:h-20 md:w-20 rounded-full bg-cinematico-gold text-cinematico-black flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg">
+              <%= @user.username.to_s.first&.upcase || "U" %>
+            </div>
+            <div>
+              <h1 class="font-cinzel text-3xl text-white"><%= @user.username %></h1>
+              <p class="text-xs text-cinematico-gold mt-1">
+                <%= @user.followers.count %> Followers • <%= @user.followed_users.count %> Following
+              </p>
+              <p class="text-xs text-gray-400 mt-1">Joined <%= format_date(@user.created_at) %></p>
+            </div>
           </div>
 
           <% if @user.profile_public? %>
             <% share_url = "#{request.base_url}#{public_profile_path(username: @user.username)}" %>
-            <div class="w-full mt-4">
-              <label class="block text-xs text-gray-400 mb-1">Shareable Profile Link</label>
-              <div class="flex gap-2">
-                <input type="text" value="<%= share_url %>" readonly class="w-full bg-cinematico-dark border border-gray-700 rounded text-cinematico-light px-3 py-2 text-sm">
-                <button type="button" onclick="navigator.clipboard && navigator.clipboard.writeText('<%= share_url %>')" class="px-3 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded hover:bg-opacity-90">Copy</button>
+            <div class="mt-2">
+              <label for="shareable_profile_link" class="block text-xs text-gray-400 mb-1">Shareable Profile Link</label>
+              <div class="flex gap-2 items-center">
+                <input id="shareable_profile_link" type="text" value="<%= share_url %>" readonly class="w-full bg-cinematico-dark border border-gray-700 rounded text-cinematico-light px-3 py-2 text-sm" aria-label="Shareable profile link">
+                <button type="button"
+                        data-copy-target="#shareable_profile_link"
+                        data-copy-message="#profile-copy-msg"
+                        class="px-3 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded hover:bg-opacity-90">Copy</button>
+                <span id="profile-copy-msg" class="text-xs text-cinematico-gold hidden">Copied!</span>
               </div>
             </div>
           <% end %>
         </div>
 
-        <div class="md:col-span-2">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <%= link_to movies_path, class: "block bg-black/40 border border-gray-800 rounded-lg p-4 hover:border-cinematico-gold transition" do %>
-              <p class="text-sm text-gray-300 mb-1">Browse</p>
-              <p class="text-xl text-white font-semibold">Movies</p>
-            <% end %>
-            <%= link_to watch_histories_path, class: "block bg-black/40 border border-gray-800 rounded-lg p-4 hover:border-cinematico-gold transition" do %>
-              <p class="text-sm text-gray-300 mb-1">Track</p>
-              <p class="text-xl text-white font-semibold">Watch History</p>
-            <% end %>
-            <%= link_to watchlist_path, class: "block bg-black/40 border border-gray-800 rounded-lg p-4 hover:border-cinematico-gold transition" do %>
-              <p class="text-sm text-gray-300 mb-1">Save</p>
-              <p class="text-xl text-white font-semibold">Watchlist</p>
-            <% end %>
-            <%= link_to lists_path, class: "block bg-black/40 border border-gray-800 rounded-lg p-4 hover:border-cinematico-gold transition" do %>
-              <p class="text-sm text-gray-300 mb-1">Curate</p>
-              <p class="text-xl text-white font-semibold">Lists</p>
-            <% end %>
-            <%= link_to stats_path, class: "block bg-black/40 border border-gray-800 rounded-lg p-4 hover:border-cinematico-gold transition" do %>
-              <p class="text-sm text-gray-300 mb-1">Analyze</p>
-              <p class="text-xl text-white font-semibold">Stats</p>
-            <% end %>
-            <%= link_to my_reviews_path, class: "block bg-black/40 border border-gray-800 rounded-lg p-4 hover:border-cinematico-gold transition" do %>
-              <p class="text-sm text-gray-300 mb-1">Write</p>
-              <p class="text-xl text-white font-semibold">My Reviews</p>
-            <% end %>
-          </div>
+        <div class="flex-1 space-y-4">
+          <% if @is_current_user %>
+            <div class="flex flex-wrap gap-3">
+              <%= link_to "Edit Profile", settings_profile_path,
+                class: "px-4 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded-lg hover:bg-opacity-90 transition" %>
+              <%= link_to "Settings", settings_path,
+                class: "px-4 py-2 border border-gray-700 text-gray-200 text-sm rounded-lg hover:border-cinematico-gold hover:text-cinematico-gold transition" %>
+              <%= link_to "My Reviews", my_reviews_path,
+                class: "px-4 py-2 border border-gray-700 text-gray-200 text-sm rounded-lg hover:border-cinematico-gold hover:text-cinematico-gold transition" %>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <%= link_to watch_histories_path, class: "block bg-white/5 border border-white/10 rounded-lg p-4 hover:border-cinematico-gold transition" do %>
+                <p class="text-sm text-gray-300 mb-1">Track</p>
+                <p class="text-xl text-white font-semibold">Watch History</p>
+              <% end %>
+              <%= link_to watchlist_path, class: "block bg-white/5 border border-white/10 rounded-lg p-4 hover:border-cinematico-gold transition" do %>
+                <p class="text-sm text-gray-300 mb-1">Save</p>
+                <p class="text-xl text-white font-semibold">Watchlist</p>
+              <% end %>
+              <%= link_to stats_path, class: "block bg-white/5 border border-white/10 rounded-lg p-4 hover:border-cinematico-gold transition" do %>
+                <p class="text-sm text-gray-300 mb-1">Analyze</p>
+                <p class="text-xl text-white font-semibold">Stats</p>
+              <% end %>
+            </div>
+          <% elsif user_signed_in? %>
+            <div class="flex flex-wrap gap-3">
+              <% if current_user.following?(@user) %>
+                <%= button_to "Unfollow", user_follow_path(@user), method: :delete,
+                    class: "px-4 py-2 border border-cinematico-gold text-cinematico-gold text-sm font-semibold rounded-lg hover:bg-cinematico-gold hover:text-cinematico-black transition" %>
+              <% else %>
+                <%= button_to "Follow", user_follow_path(@user), method: :post,
+                    class: "px-4 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded-lg hover:bg-opacity-90 transition" %>
+              <% end %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="section-surface p-8 md:p-10 space-y-6">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-cinzel text-2xl text-cinematico-gold"><%= @is_current_user ? "Your Lists" : "Public Lists" %></h2>
+          <% if @is_current_user %>
+            <%= link_to "+ New List", new_list_path, class: "text-sm text-cinematico-gold hover:underline" %>
+          <% end %>
+        </div>
 
-    <div class="glass p-8 md:p-10">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-cinzel text-2xl text-cinematico-gold">Lists</h2>
-        <% if user_signed_in? && current_user == @user %>
-          <%= link_to "+ New List", new_list_path, class: "text-sm text-cinematico-gold hover:underline" %>
+        <% if @lists.present? %>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <% @lists.each do |list| %>
+              <%= link_to list_path(list), class: "block bg-cinematico-dark border border-gray-800 rounded-lg p-4 hover:border-cinematico-gold transition group" do %>
+                <h3 class="text-white font-semibold group-hover:text-cinematico-gold transition"><%= list.name %></h3>
+                <p class="text-xs text-gray-400 mt-1">
+                  <%= list.list_items.count %> movies • <%= list.public? ? "Public" : "Private" %>
+                </p>
+              <% end %>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-gray-400 text-sm italic"><%= @is_current_user ? "No lists created yet." : "No public lists yet." %></p>
         <% end %>
       </div>
 
-      <% if @lists.present? %>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <% @lists.each do |list| %>
-            <%= link_to list_path(list), class: "block bg-cinematico-dark border border-gray-800 rounded-lg p-4 hover:border-cinematico-gold transition group" do %>
-              <h3 class="text-white font-semibold group-hover:text-cinematico-gold transition"><%= list.name %></h3>
-              <p class="text-xs text-gray-400 mt-1">
-                <%= list.list_items.count %> movies • <%= list.public? ? "Public" : "Private" %>
-              </p>
+      <div class="section-surface p-8 md:p-10 space-y-4">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-cinzel text-2xl text-cinematico-gold">Recent Reviews</h2>
+          <% if @recent_reviews.present? %>
+            <% if @is_current_user %>
+              <%= link_to "View all", my_reviews_path, class: "text-gray-300 hover:text-cinematico-gold text-sm" %>
+            <% elsif @user.profile_public? %>
+              <%= link_to "View all", user_reviews_path(username: @user.username), class: "text-gray-300 hover:text-cinematico-gold text-sm" %>
             <% end %>
           <% end %>
         </div>
-      <% else %>
-        <p class="text-gray-400 text-sm italic">No lists created yet.</p>
-      <% end %>
-    </div>
-
-    <% if @recent_reviews.present? %>
-      <div class="glass p-8 md:p-10">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="font-cinzel text-2xl text-cinematico-gold">Recent Reviews</h2>
-          <% if user_signed_in? && current_user == @user %>
-             <%= link_to "View all", my_reviews_path, class: "text-gray-300 hover:text-cinematico-gold text-sm" %>
-          <% end %>
-        </div>
-
-        <div class="space-y-4">
+        <% if @user.profile_public? && @recent_reviews.present? %>
           <% @recent_reviews.each do |review| %>
             <div class="bg-cinematico-dark border border-gray-800 rounded-lg p-4">
               <div class="flex items-center justify-between mb-2">
@@ -134,16 +118,24 @@
                 </span>
               </div>
               <p class="text-xs text-gray-400 mb-2">
-                 Reviewed on <%= format_date(review.created_at) %>
+                Reviewed on <%= format_date(review.created_at) %>
               </p>
               <% if review.body.present? %>
                 <p class="text-sm text-gray-200 line-clamp-3"><%= review.body %></p>
               <% end %>
             </div>
           <% end %>
-        </div>
+        <% else %>
+          <p class="text-gray-400 text-sm italic text-center">
+            <% if @user.profile_public? %>
+              No recent reviews.
+            <% else %>
+              This user's reviews are private.
+            <% end %>
+          </p>
+        <% end %>
       </div>
-    <% end %>
+    </div>
 
   </div>
 </div>

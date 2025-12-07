@@ -1,5 +1,5 @@
 <%= link_to movie_path(movie["id"]), class: "group block focus:outline-none focus-visible:ring-2 focus-visible:ring-cinematico-gold rounded-lg" do %>
-  <div class="relative overflow-hidden rounded-lg bg-cinematico-dark border border-cinematico-grey hover:border-cinematico-gold transition-all duration-300">
+  <div class="relative overflow-hidden rounded-lg bg-cinematico-dark/80 border border-white/10 hover:border-cinematico-gold transition-all duration-300 backdrop-blur">
     <% if movie["poster_path"] %>
       <%= image_tag TmdbService.poster_url(movie["poster_path"]),
           alt: movie["title"],

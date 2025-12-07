@@ -55,7 +55,8 @@
                 <%= select_tag :selected_list_id, 
                     options_from_collection_for_select(current_user.lists, :id, :name), 
                     prompt: "Add to List...",
-                    class: "bg-cinematico-dark text-white text-sm rounded border border-gray-700 px-3 py-2 focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold" %>
+                    class: "bg-cinematico-dark text-white text-sm rounded border border-gray-700 px-3 py-2 focus:border-cinematico-gold focus:ring-1 focus:ring-cinematico-gold",
+                    style: "background-color: #0b0b0f; color: #e5e5e5;" %>
                 <%= f.submit "Add", class: "bg-cinematico-gold text-cinematico-black text-sm font-bold px-4 py-2 rounded hover:bg-yellow-500 cursor-pointer" %>
               <% end %>
             </div>
@@ -83,7 +84,7 @@
             </div>
           <% else %>
             <div class="mb-6">
-              <p class="text-cinematico-grey italic">No overview available.</p>
+            <p class="text-cinematico-white italic">No overview available.</p>
             </div>
           <% end %>
 
@@ -127,8 +128,8 @@
           <h2 class="font-cinzel text-3xl text-cinematico-gold">Reviews</h2>
           
           <div class="flex gap-4 text-sm mt-4 md:mt-0">
-            <%= link_to "Top Rated", movie_path(@movie, sort: 'top'), class: "px-4 py-2 rounded border #{params[:sort] != 'newest' ? 'border-cinematico-gold text-cinematico-gold bg-cinematico-gold/10' : 'border-gray-700 text-gray-200 hover:border-cinematico-gold transition'}" %>
-            <%= link_to "Newest", movie_path(@movie, sort: 'newest'), class: "px-4 py-2 rounded border #{params[:sort] == 'newest' ? 'border-cinematico-gold text-cinematico-gold bg-cinematico-gold/10' : 'border-gray-700 text-gray-200 hover:border-cinematico-gold transition'}" %>
+          <%= link_to "Top Rated", movie_path(@movie, sort: 'top'), class: "px-4 py-2 rounded border #{params[:sort] != 'newest' ? 'border-cinematico-gold text-cinematico-gold bg-cinematico-gold/10' : 'border-gray-700 text-gray-200 hover:border-cinematico-gold transition'}", aria: { label: "Show top rated reviews" } %>
+          <%= link_to "Newest", movie_path(@movie, sort: 'newest'), class: "px-4 py-2 rounded border #{params[:sort] == 'newest' ? 'border-cinematico-gold text-cinematico-gold bg-cinematico-gold/10' : 'border-gray-700 text-gray-200 hover:border-cinematico-gold transition'}", aria: { label: "Show newest reviews" } %>
           </div>
         </div>
 
@@ -139,12 +140,8 @@
               <%= form_with url: watch_histories_path, local: true do |f| %>
                 <%= hidden_field_tag :movie_id, @movie.id %>
                 <div class="mb-3">
-                  <%= label_tag :watched_on, "Watched On", class: "block text-sm text-cinematico-grey mb-1" %>
+                  <%= label_tag :watched_on, "Watched On", class: "block text-sm text-cinematico-white mb-1" %>
                   <%= date_field_tag :watched_on, Date.current, class: "w-full bg-cinematico-black border border-gray-700 rounded text-white px-3 py-2" %>
-                </div>
-                <div class="mb-3">
-                  <%= label_tag :rating, "Rating (1-10)", class: "block text-sm text-cinematico-grey mb-1" %>
-                  <%= number_field_tag :rating, nil, in: 1..10, class: "w-full bg-cinematico-black border border-gray-700 rounded text-white px-3 py-2" %>
                 </div>
                 <%= f.submit "Log as Watched", class: "px-4 py-2 bg-cinematico-gold text-cinematico-black rounded font-semibold" %>
               <% end %>
@@ -167,7 +164,7 @@
           </div>
         <% else %>
           <div class="bg-cinematico-dark border border-gray-800 p-6 rounded-lg mb-10 text-center">
-            <p class="text-cinematico-grey">Please <%= link_to "Sign In", new_user_session_path, class: "text-cinematico-gold hover:underline" %> to leave a review.</p>
+            <p class="text-cinematico-white">Please <%= link_to "Sign In", new_user_session_path, class: "text-cinematico-gold hover:underline" %> to leave a review.</p>
           </div>
         <% end %>
 
@@ -175,7 +172,7 @@
           <% if @reviews.any? %>
             <%= render @reviews %>
           <% else %>
-            <p class="text-cinematico-grey italic text-center py-8">No reviews yet. Be the first to review!</p>
+            <p class="text-cinematico-white italic text-center py-8">No reviews yet. Be the first to review!</p>
           <% end %>
         </div>
       </div>
@@ -185,11 +182,11 @@
         
         <% if @similar_movies.is_a?(Hash) && @similar_movies["error"] %>
           <div class="text-center py-8 bg-cinematico-dark rounded-lg border border-cinematico-grey">
-            <p class="text-cinematico-grey"><%= @similar_movies["error"] %></p>
+            <p class="text-cinematico-white"><%= @similar_movies["error"] %></p>
           </div>
         <% elsif @similar_movies.empty? %>
           <div class="text-center py-8 bg-cinematico-dark rounded-lg border border-cinematico-grey">
-            <p class="text-cinematico-grey">No similar movies available at this time.</p>
+            <p class="text-cinematico-white">No similar movies available at this time.</p>
           </div>
         <% else %>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">

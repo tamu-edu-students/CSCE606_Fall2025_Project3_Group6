@@ -3,15 +3,20 @@ class FollowsController < ApplicationController
   before_action :set_user
 
   def create
-    current_user.followed_users << @user
+    if @user == current_user
+      redirect_back(fallback_location: user_path(@user), alert: "You cannot follow yourself.")
+      return
+    end
 
-    # Notify the user who was followed
-    NotificationCreator.call(
-      actor: current_user,
-      recipient: @user,
-      notification_type: "user.followed",
-      body: "#{current_user.username} started following you"
-    )
+    follow = current_user.follows.find_or_initialize_by(followed: @user)
+    if follow.persisted? || follow.save
+      NotificationCreator.call(
+        actor: current_user,
+        recipient: @user,
+        notification_type: "user.followed",
+        body: "#{current_user.username} started following you"
+      )
+    end
 
     redirect_back(fallback_location: user_path(@user))
   end

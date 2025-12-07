@@ -39,7 +39,9 @@ class NotificationCreator
     )
 
     # Send email notification if body is present
-    NotificationMailer.send_notification(recipient, body).deliver_later if body.present?
+    if body.present? && recipient.notification_preference&.email_notifications?
+      NotificationMailer.send_notification(recipient, body).deliver_later
+    end
 
     notification
   rescue ActiveRecord::RecordInvalid => e

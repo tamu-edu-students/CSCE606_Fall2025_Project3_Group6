@@ -14,6 +14,9 @@ RSpec.describe MoviesController, type: :controller do
     context "with empty query" do
       before do
         allow(tmdb_service).to receive(:genres).and_return({ "genres" => [] })
+        allow(tmdb_service).to receive(:trending_movies).and_return({ "results" => [], "total_pages" => 0, "error" => nil })
+        allow(tmdb_service).to receive(:top_rated_movies).and_return({ "results" => [], "total_pages" => 0, "error": nil })
+        allow(tmdb_service).to receive(:recommendations).and_return({ "results" => [] }) if tmdb_service.respond_to?(:recommendations)
       end
 
       it "renders index template" do

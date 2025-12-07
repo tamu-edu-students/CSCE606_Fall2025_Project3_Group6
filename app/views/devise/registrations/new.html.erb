@@ -1,5 +1,5 @@
-<div class="min-h-screen flex items-center justify-center p-6 bg-cinematico-black">
-  <div class="glass-dark max-w-md w-full p-10">
+<div class="min-h-screen flex items-center justify-center p-6 app-shell">
+  <div class="glass-dark max-w-md w-full p-10 relative z-10">
 
     <h2 class="text-3xl font-cinzel text-center text-cinematico-gold mb-6">
       Create Your Account
@@ -16,7 +16,10 @@
       <%= f.email_field :email, class: "w-full px-4 py-3 rounded-lg glass-thin text-white" %>
 
       <%= f.label :password, class: "block text-cinematico-light mb-1 mt-6" %>
-      <%= f.password_field :password, class: "w-full px-4 py-3 rounded-lg glass-thin text-white" %>
+      <div class="relative">
+        <%= f.password_field :password, class: "w-full px-4 py-3 rounded-lg glass-thin text-white pr-20", id: "registration_password" %>
+        <button type="button" data-toggle-password="#registration_password" class="absolute inset-y-0 right-2 px-3 text-sm text-cinematico-gold hover:text-white">Show</button>
+      </div>
 
       <%= f.submit "Create Account",
             class: "mt-8 w-full py-3 bg-cinematico-gold text-black font-semibold rounded-lg hover:opacity-90 transition" %>

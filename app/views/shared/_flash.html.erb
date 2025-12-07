@@ -6,11 +6,11 @@
       <% styles =
         case type.to_sym
         when :notice, :success
-          "from-[#E8C07D] to-[#B37D2A] text-black border-[#E8C07D]/30"
+          "from-[#E8C07D]/90 to-[#B37D2A]/85 text-black border-[#E8C07D]/20 backdrop-blur"
         when :alert, :error
-          "from-red-600 to-red-800 text-white border-red-500/30"
+          "from-red-600/90 to-red-800/85 text-white border-red-500/20 backdrop-blur"
         else
-          "from-[#1F2937] to-[#0F172A] text-white border-white/10"
+          "from-[#1F2937]/85 to-[#0F172A]/80 text-white border-white/10 backdrop-blur"
         end
       %>
 

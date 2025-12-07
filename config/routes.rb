@@ -6,9 +6,11 @@ Rails.application.routes.draw do
 
   # User profile
   get "/profile", to: "users#show"
+  get "/settings", to: "users#settings", as: :settings
   get "/settings/profile", to: "users#edit"
   patch "/settings/profile", to: "users#update"
   get "/u/:username", to: "users#public_profile", as: :public_profile
+  get "/u/:username/reviews", to: "users#reviews", as: :user_reviews
 
   get "up" => "rails/health#show", as: :rails_health_check
 
@@ -51,6 +53,7 @@ Rails.application.routes.draw do
 
   # Stats dashboard (From Main Branch)
   get "stats", to: "stats#show", as: :stats
+  get "/u/:username/stats", to: "stats#public", as: :public_stats
 
   # Notifications
   resources :notifications, only: [ :index ] do

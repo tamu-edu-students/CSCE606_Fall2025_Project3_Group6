@@ -69,6 +69,8 @@ class WatchHistoriesController < ApplicationController
       redirect_back fallback_location: root_path, alert: "Movie not found" and return
     end
 
+    ensure_movie_runtime(movie)
+
     watched_on = params[:watched_on].presence || Date.current
     rating_param = params[:rating].presence
     rating_value = rating_param.to_i if rating_param.present? && rating_param.to_i.between?(1, 10)
@@ -96,5 +98,23 @@ class WatchHistoriesController < ApplicationController
     else
       redirect_to watch_histories_path, alert: "Watch history entry not found"
     end
+  end
+
+  private
+
+  def ensure_movie_runtime(movie)
+    return unless movie&.runtime.blank? && movie.tmdb_id.present?
+
+    tmdb = tmdb_service.movie_details(movie.tmdb_id)
+    runtime_val = tmdb.is_a?(Hash) ? tmdb["runtime"] || tmdb[:runtime] : nil
+    return unless runtime_val.present? && runtime_val.to_i > 0
+
+    movie.update(runtime: runtime_val.to_i, cached_at: Time.current)
+  rescue StandardError => e
+    Rails.logger.error("WatchHistoriesController#ensure_movie_runtime error: #{e.message}")
+  end
+
+  def tmdb_service
+    @tmdb_service ||= TmdbService.new
   end
 end

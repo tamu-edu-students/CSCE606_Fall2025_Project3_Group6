@@ -9,16 +9,20 @@
         <div>
           <h1 class="font-cinzel text-5xl text-cinematico-gold mb-4"><%= @list.name %></h1>
           <p class="text-cinematico-light text-lg mb-2"><%= @list.description %></p>
-          <p class="text-cinematico-grey text-sm">Curated by <%= link_to @list.user.username || @list.user.email, user_path(@list.user), class: "hover:text-white" %></p>
+          <p class="text-cinematico-white text-sm">Curated by <%= link_to @list.user.username || @list.user.email, user_path(@list.user), class: "hover:text-white" %></p>
         </div>
         <div class="flex flex-col items-end gap-3">
           <% if @list.public? %>
             <% share_url = "#{request.base_url}#{list_path(@list)}" %>
             <div class="w-full">
-              <label class="block text-xs text-gray-400 mb-1 text-right">Shareable Link</label>
-              <div class="flex gap-2">
-                <input type="text" value="<%= share_url %>" readonly class="w-56 bg-cinematico-dark border border-gray-700 rounded text-cinematico-light px-3 py-2 text-sm">
-                <button type="button" onclick="navigator.clipboard && navigator.clipboard.writeText('<%= share_url %>')" class="px-3 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded hover:bg-opacity-90">Copy</button>
+              <label for="shareable_list_link" class="block text-xs text-gray-400 mb-1 text-right">Shareable Link</label>
+              <div class="flex gap-2 items-center">
+                <input id="shareable_list_link" type="text" value="<%= share_url %>" readonly class="w-56 bg-cinematico-dark border border-gray-700 rounded text-cinematico-light px-3 py-2 text-sm" aria-label="Shareable list link">
+                <button type="button"
+                        data-copy-target="#shareable_list_link"
+                        data-copy-message="#list-copy-msg"
+                        class="px-3 py-2 bg-cinematico-gold text-cinematico-black text-sm font-semibold rounded hover:bg-opacity-90">Copy</button>
+                <span id="list-copy-msg" class="text-xs text-cinematico-gold hidden">Copied!</span>
               </div>
             </div>
           <% end %>
@@ -53,7 +57,7 @@
     
     <% if @list.movies.empty? %>
       <div class="text-center py-20 bg-cinematico-dark rounded border border-gray-800">
-        <p class="text-cinematico-grey">This list is empty.</p>
+        <p class="text-cinematico-white">This list is empty.</p>
       </div>
     <% end %>
   </div>

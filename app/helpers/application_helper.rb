@@ -13,6 +13,6 @@ module ApplicationHelper
         value.to_date
       end
 
-    date&.strftime("%m/%d/%Y")
+    date&.strftime("%Y")
   end
 end

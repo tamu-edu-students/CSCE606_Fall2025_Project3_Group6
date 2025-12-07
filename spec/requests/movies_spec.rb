@@ -13,6 +13,8 @@ RSpec.describe "Movies", type: :request do
     context "with empty query" do
       it "returns http success" do
         allow(tmdb_service).to receive(:genres).and_return({ "genres" => [] })
+        allow(tmdb_service).to receive(:trending_movies).and_return({ "results" => [], "total_pages" => 0, "error" => nil })
+        allow(tmdb_service).to receive(:top_rated_movies).and_return({ "results" => [], "total_pages" => 0, "error" => nil })
         get movies_path
         expect(response).to have_http_status(:success)
       end

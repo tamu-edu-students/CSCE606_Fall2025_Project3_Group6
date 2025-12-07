@@ -2,7 +2,11 @@
   <div class="flex justify-between items-start gap-4">
     <div class="flex-1">
       <div class="flex items-center gap-3 mb-2">
-        <h4 class="font-bold text-cinematico-light"><%= review.user.username || review.user.email.split('@').first %></h4>
+        <h4 class="font-bold text-cinematico-light">
+          <%= link_to (review.user.username || review.user.email.split('@').first),
+              user_path(review.user),
+              class: "hover:text-cinematico-gold underline underline-offset-2" %>
+        </h4>
         <span class="px-2 py-0.5 bg-yellow-900/30 text-cinematico-gold text-sm font-bold rounded border border-yellow-900/50">★ <%= review.rating %></span>
       </div>
       <p class="text-xs text-gray-400 mb-4"><%= time_ago_in_words(review.created_at) %> ago</p>

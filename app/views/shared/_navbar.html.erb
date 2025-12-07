@@ -7,35 +7,22 @@
     <% end %>
 
     <div class="flex items-center gap-6">
-      <%= link_to "Browse", movies_path, class: "text-[#F5F5F5] hover:text-white font-medium" %>
-
       <% if user_signed_in? %>
-        <div class="mr-2">
-          <%= render 'shared/notifications_dropdown', user: current_user, signed_in: true %>
-          <%= turbo_stream_from [current_user, :notifications] %>
-        </div>
+        <%= link_to "Browse", movies_path, class: "text-[#F5F5F5] hover:text-white font-medium" %>
+
         <%= link_to "Profile",
           profile_path,
           class: "text-[#F5F5F5] hover:text-white font-medium" %>
 
-        <%= link_to "My Reviews",
-          my_reviews_path,
-          class: "text-[#F5F5F5] hover:text-white font-medium" %>
-        <%= link_to "Watchlist", watchlist_path, class: "hover:text-cinematico-gold transition" %>
-        <%= link_to "Watch History", watch_histories_path, class: "hover:text-cinematico-gold transition" %>
-
-        <%= link_to "Stats",
-          stats_path,
-          class: "text-[#F5F5F5] hover:text-white font-medium" %>
-
-        <%= link_to "Settings",
-          edit_notification_preferences_path,
-          class: "text-[#F5F5F5] hover:text-white font-medium" %>
+        <div class="mr-2">
+          <%= render 'shared/notifications_dropdown', user: current_user, signed_in: true %>
+          <%= turbo_stream_from [current_user, :notifications] %>
+        </div>
 
         <%= button_to "Log Out",
           destroy_user_session_path,
           method: :delete,
-          class: "px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-semibold" %>
+          class: "px-4 py-2 border border-cinematico-gold text-cinematico-gold rounded-md font-semibold hover:bg-cinematico-gold hover:text-black transition" %>
 
       <% else %>
         <%= link_to "Sign In",

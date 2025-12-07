@@ -29,6 +29,14 @@
             <p class="text-sm text-cinematico-grey mt-1">Get notified when someone follows you</p>
           <% end %>
         </div>
+
+        <div class="flex items-start gap-3 p-3 bg-[#1A1A1A]">
+          <%= f.check_box :email_notifications, class: "mt-1 w-5 h-5 text-cinematico-gold bg-cinematico-dark border-cinematico-grey rounded focus:ring-cinematico-gold" %>
+          <%= f.label :email_notifications, class: "flex-1 text-cinematico-light" do %>
+            <span class="font-semibold block">Email Alerts</span>
+            <p class="text-sm text-cinematico-grey mt-1">Receive email notifications in addition to in-app alerts</p>
+          <% end %>
+        </div>
       </div>
 
       <div class="mt-6 flex gap-3">

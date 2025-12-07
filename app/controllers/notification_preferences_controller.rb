@@ -19,7 +19,7 @@ class NotificationPreferencesController < ApplicationController
   private
 
   def preference_params
-    params.require(:notification_preference).permit(:review_created, :review_voted, :user_followed)
+    params.require(:notification_preference).permit(:review_created, :review_voted, :user_followed, :email_notifications)
   end
 
   def ensure_preference_exists

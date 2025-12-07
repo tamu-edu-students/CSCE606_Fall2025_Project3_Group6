@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_06_020125) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_06_120825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -73,9 +73,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_06_020125) do
 
   create_table "genres", force: :cascade do |t|
     t.string "name"
-    t.integer "tmdb_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "tmdb_id"
     t.index ["tmdb_id"], name: "index_genres_on_tmdb_id"
   end
 
@@ -162,6 +162,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_06_020125) do
     t.boolean "user_followed", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "email_notifications", default: true
     t.index ["user_id"], name: "index_notification_preferences_on_user_id", unique: true
   end
 

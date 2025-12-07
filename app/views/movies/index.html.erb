@@ -1,10 +1,10 @@
-<div class="min-h-screen pt-20 px-6 pb-12">
-  <div class="max-w-7xl mx-auto">
+<div class="min-h-screen app-shell pt-20 px-6 pb-12">
+  <div class="max-w-7xl mx-auto relative z-10 space-y-8">
     <!-- Search Section -->
-    <div class="mb-8">
+    <div class="section-surface p-8 md:p-10">
       <h1 class="font-cinzel text-4xl text-cinematico-gold mb-6">Search Movies</h1>
-      
-      <%= form_with url: movies_path, method: :get, local: true, class: "mb-6" do |f| %>
+
+      <%= form_with url: movies_path, method: :get, local: true, class: "space-y-6" do |f| %>
         <div class="flex gap-4 flex-wrap">
           <div class="flex-1 min-w-[300px]">
             <%= f.label :query, "Search for a movie", class: "block text-cinematico-light mb-1" %>
@@ -72,7 +72,7 @@
 
       <!-- Empty State -->
       <% if @movies.empty? && !@error %>
-        <div class="text-center py-12">
+        <div class="section-surface p-8 md:p-10 text-center">
           <p class="text-cinematico-light text-lg">No movies found. Try a different search query.</p>
         </div>
       <% end %>
@@ -113,7 +113,7 @@
     <% else %>
       <div class="space-y-12">
         <!-- Personalized Recommendations -->
-        <div class="bg-cinematico-dark border border-cinematico-grey rounded-lg p-6 shadow-lg">
+        <div class="section-surface p-8 md:p-10 shadow-lg">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <div>
               <h2 class="font-cinzel text-3xl text-cinematico-gold">Personalized Recommendations</h2>

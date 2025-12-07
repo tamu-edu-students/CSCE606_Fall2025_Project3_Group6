@@ -40,7 +40,9 @@ class WatchLog < ApplicationRecord
 
     log = Log.find_or_initialize_by(user_id: user_id, movie_id: movie_id, watched_on: watched_on)
     log.rating = rating_value
-    log.rewatch = false if log.rewatch.nil?
+    prior_watch = Log.where(user_id: user_id, movie_id: movie_id).where.not(watched_on: watched_on).exists? ||
+      watch_history&.watch_logs&.where(movie_id: movie_id).where.not(id: id).exists?
+    log.rewatch = prior_watch || log.rewatch || false
     log.save!
   rescue StandardError => e
     Rails.logger.error("WatchLog#sync_to_log error: #{e.message}")
