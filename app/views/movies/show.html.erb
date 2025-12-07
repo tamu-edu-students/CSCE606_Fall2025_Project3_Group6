@@ -13,17 +13,19 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         <div class="md:col-span-1">
-          <% poster_url = @movie.poster_url %>
-          <% if poster_url.present? && @movie.poster_path.present? %>
+          <% poster_url = @movie.poster_url || poster_placeholder_url %>
+          <% is_placeholder = @movie.poster_url.blank? %>
+          <div class="relative">
             <%= image_tag poster_url, 
-                alt: @movie.title, 
-                class: "w-full rounded-lg shadow-lg",
-                onerror: "this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'450\\'%3E%3Crect fill=\\'%23333\\' width=\\'300\\' height=\\'450\\'/%3E%3Ctext fill=\\'%23999\\' font-family=\\'Arial\\' font-size=\\'18\\' x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'%3ENo Poster%3C/text%3E%3C/svg%3E'" %>
-          <% else %>
-            <div class="w-full aspect-[2/3] bg-cinematico-grey rounded-lg flex items-center justify-center">
-              <span class="text-cinematico-dark">No Poster Available</span>
-            </div>
-          <% end %>
+                alt: is_placeholder ? "No Poster Available" : @movie.title,
+                class: "w-full rounded-lg shadow-lg poster-placeholder",
+                title: is_placeholder ? "No Poster Available" : @movie.title %>
+            <% if is_placeholder %>
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span class="text-cinematico-dark bg-cinematico-grey/50 px-2 py-1 rounded text-sm">No Poster Available</span>
+              </div>
+            <% end %>
+          </div>
         </div>
 
         <div class="md:col-span-2">
@@ -195,16 +197,10 @@
               <div class="group relative">
                 <%= link_to movie_path(movie['id']), class: 'group block focus:outline-none focus-visible:ring-2 focus-visible:ring-cinematico-gold rounded-lg' do %>
                   <div class="relative overflow-hidden rounded-lg bg-cinematico-dark border border-cinematico-grey hover:border-cinematico-gold transition-all duration-300">
-                    <% if movie['poster_path'].present? %>
-                      <%= image_tag TmdbService.poster_url(movie['poster_path']), 
-                          alt: movie['title'], 
-                          class: 'w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300',
-                          onerror: "this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'450\\'%3E%3Crect fill=\\'%23333\\' width=\\'300\\' height=\\'450\\'/%3E%3Ctext fill=\\'%23999\\' font-family=\\'Arial\\' font-size=\\'18\\' x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'%3ENo Poster%3C/text%3E%3C/svg%3E'" %>
-                    <% else %>
-                      <div class="w-full aspect-[2/3] bg-cinematico-grey flex items-center justify-center">
-                        <span class="text-cinematico-dark text-xs">No Poster</span>
-                      </div>
-                    <% end %>
+                    <% similar_poster_url = movie['poster_path'].present? ? TmdbService.poster_url(movie['poster_path']) : poster_placeholder_url %>
+                    <%= image_tag similar_poster_url, 
+                        alt: movie['poster_path'].present? ? movie['title'] : "No Poster Available",
+                        class: 'w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300 poster-placeholder' %>
                     
                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cinematico-black to-transparent p-3">
                       <h3 class="font-semibold text-white text-sm mb-1 line-clamp-2"><%= movie['title'] %></h3>

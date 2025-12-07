@@ -34,6 +34,7 @@ class Movie < ApplicationRecord
   end
 
   def poster_url
+    return nil if poster_path.blank?
     TmdbService.poster_url(poster_path)
   end
 
