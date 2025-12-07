@@ -34,7 +34,7 @@ class ListsController < ApplicationController
     if @list.update(list_params)
       redirect_to @list, notice: "List updated successfully."
     else
-      raise ActionView::MissingTemplate.new([], "edit", [], false, "lists")
+      render :edit, status: :unprocessable_entity
     end
   end
 
