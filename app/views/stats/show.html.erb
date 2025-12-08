@@ -70,6 +70,27 @@
               <div class="bg-black/40 border border-gray-800 rounded-lg p-4">
                 <p class="sr-only" id="genre-chart-desc">Doughnut chart showing counts by genre.</p>
                 <canvas id="genreChart" height="320" style="min-height: 320px;" role="img" aria-label="Genre breakdown chart" aria-describedby="genre-chart-desc"></canvas>
+                <noscript>
+                  <div class="overflow-x-auto mt-4">
+                    <table class="min-w-full text-left text-sm text-gray-200">
+                      <caption class="text-left text-gray-300 mb-2">Genre counts</caption>
+                      <thead class="text-gray-400 text-xs uppercase">
+                        <tr>
+                          <th scope="col" class="py-2 pr-4">Genre</th>
+                          <th scope="col" class="py-2">Movies</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-800">
+                        <% @overview[:genre_breakdown].each do |name, count| %>
+                          <tr>
+                            <td class="py-2 pr-4"><%= name %></td>
+                            <td class="py-2"><%= count %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                </noscript>
               </div>
             </div>
         <% end %>
@@ -238,6 +259,28 @@
               <% if activity_sum > 0 %>
                 <p class="sr-only" id="activity-chart-desc">Line chart of movies watched by month.</p>
                 <canvas id="activityChart" height="250" role="img" aria-label="Watching activity over time" aria-describedby="activity-chart-desc"></canvas>
+                <noscript>
+                  <div class="overflow-x-auto w-full mt-4">
+                    <table class="min-w-full text-left text-sm text-gray-200">
+                      <caption class="text-left text-gray-300 mb-2">Movies watched per month</caption>
+                      <thead class="text-gray-400 text-xs uppercase">
+                        <tr>
+                          <th scope="col" class="py-2 pr-4">Month</th>
+                          <th scope="col" class="py-2">Movies watched</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-800">
+                        <% @trend_data[:activity_trend].each do |row| %>
+                          <tr>
+                            <% month_label = Date.strptime(row[:month], "%Y-%m").strftime("%b %Y") rescue row[:month] %>
+                            <td class="py-2 pr-4"><%= month_label %></td>
+                            <td class="py-2"><%= row[:count] %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                </noscript>
               <% else %>
                 <p class="text-gray-400 text-sm text-center">No movies watched this year.</p>
               <% end %>
@@ -251,6 +294,28 @@
               <% if rating_present %>
                 <p class="sr-only" id="rating-chart-desc">Line chart of average ratings by month.</p>
                 <canvas id="ratingChart" height="250" role="img" aria-label="Average rating over time" aria-describedby="rating-chart-desc"></canvas>
+                <noscript>
+                  <div class="overflow-x-auto w-full mt-4">
+                    <table class="min-w-full text-left text-sm text-gray-200">
+                      <caption class="text-left text-gray-300 mb-2">Average rating per month</caption>
+                      <thead class="text-gray-400 text-xs uppercase">
+                        <tr>
+                          <th scope="col" class="py-2 pr-4">Month</th>
+                          <th scope="col" class="py-2">Average rating</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-800">
+                        <% @trend_data[:rating_trend].each do |row| %>
+                          <tr>
+                            <% month_label = Date.strptime(row[:month], "%Y-%m").strftime("%b %Y") rescue row[:month] %>
+                            <td class="py-2 pr-4"><%= month_label %></td>
+                            <td class="py-2"><%= row[:average_rating] %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                </noscript>
               <% else %>
                 <p class="text-cinematico-light text-sm text-center">Not enough data.</p>
               <% end %>
@@ -279,6 +344,36 @@
         <% if @heatmap_data.present? && @heatmap_data.values.any? { |v| v > 0 } %>
           <div class="bg-black/40 border border-gray-800 rounded-lg p-6 overflow-x-auto">
             <div id="heatmap" class="heatmap-container" role="img" aria-label="Activity heatmap for <%= @heatmap_year %>"></div>
+            <noscript>
+              <% monthly_totals = Hash.new(0) %>
+              <% @heatmap_data.each do |date_str, count| %>
+                <% parsed_date = Date.parse(date_str) rescue nil %>
+                <% next unless parsed_date %>
+                <% month_key = parsed_date.strftime("%Y-%m") %>
+                <% monthly_totals[month_key] += count.to_i %>
+              <% end %>
+              <% month_rows = monthly_totals.sort_by { |key, _| key } %>
+              <div class="overflow-x-auto mt-4">
+                <table class="min-w-full text-left text-sm text-gray-200">
+                  <caption class="text-left text-gray-300 mb-2">Monthly activity totals</caption>
+                  <thead class="text-gray-400 text-xs uppercase">
+                    <tr>
+                      <th scope="col" class="py-2 pr-4">Month</th>
+                      <th scope="col" class="py-2">Movies watched</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-800">
+                    <% month_rows.each do |month_key, total| %>
+                      <% label = Date.strptime(month_key, "%Y-%m").strftime("%b %Y") rescue month_key %>
+                      <tr>
+                        <td class="py-2 pr-4"><%= label %></td>
+                        <td class="py-2"><%= total %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </noscript>
           </div>
         <% else %>
           <p class="text-gray-400 text-center py-8">No activity data to display for <%= @heatmap_year %>. Try another year.</p>
