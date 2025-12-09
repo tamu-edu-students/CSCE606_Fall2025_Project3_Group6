@@ -14,7 +14,6 @@ RSpec.describe ListsController, type: :controller do
     context 'when authenticated' do
       before do
         sign_in user
-        allow(controller).to receive(:render).and_return(true)
       end
 
       it 'assigns user lists' do
@@ -22,11 +21,10 @@ RSpec.describe ListsController, type: :controller do
         list2 = create(:list, user: user)
         create(:list, user: other_user)
 
-        expect {
-          get :index
-        }.to raise_error(ActionController::MissingExactTemplate)
-        # Note: Template is missing, but we can verify the controller logic
-        # by checking that the action is called and assigns are set
+        get :index
+        
+        expect(response).to have_http_status(:success)
+        expect(assigns(:lists)).to match_array([list1, list2])
       end
     end
 
