@@ -30,8 +30,8 @@
 - **Framework**: Ruby on Rails 8.0.3
 - **Database**: PostgreSQL
 - **Web Server**: Puma with Thruster
-- **Frontend**: Tailwind CSS, Stimulus, Turbo
-- **Deployment**: Kamal (Docker-based)
+- **Frontend**: Tailwind CSS
+- **Deployment**: Heroku
 - **External API**: The Movie Database (TMDb) API v3
 - **Authentication**: Devise
 - **Background Jobs**: Solid Queue
@@ -275,9 +275,7 @@ Before starting, ensure you have the following installed:
 
 - **Ruby 3.4.1** (check with `ruby -v`)
 - **PostgreSQL 9.3+** (check with `psql --version`)
-- **Node.js 18+** (check with `node -v`)
-- **Git** (check with `git --version`)
-- **Docker** (for deployment, check with `docker --version`)
+- **redis-server** (check with `redis-server -v`)
 
 ### Step 1: Clone the Repository
 
@@ -325,23 +323,22 @@ CREATE DATABASE cinematico_test OWNER cinematico;
 touch .env
 
 # Add the following to .env:
-# TMDB_ACCESS_TOKEN=your_tmdb_access_token_here
-# RAILS_MASTER_KEY=your_rails_master_key_here
+SENDGRID_API_KEY=<sendgrid-api>
+TMDB_ACCESS_TOKEN=<tmdb-access-token>
 ```
 
 **To get a TMDb Access Token:**
 1. Visit https://www.themoviedb.org/
 2. Create an account
-3. Go to Settings > API
-4. Request an API key
-5. Copy the access token to your `.env` file
+3. Setup an api key and obtain the TMDb access token
+4. Set TMDB_ACCESS_TOKEN in .env as the access token obtained
 
-**To get Rails Master Key:**
-- The master key is in `config/master.key` (do not commit this file)
-- If missing, you can extract it from `config/credentials.yml.enc` using:
-  ```bash
-  EDITOR="code --wait" rails credentials:edit
-  ```
+**To get Sendgrid API KEY:**
+1. Visit https://www.twilio.com/en-us/products/email-api
+2. Create an account
+3. Create an API Key and get the API key secret
+4. Set SENDGRID_API_KEY .env as the secret obtained
+
 
 ### Step 5: Set Up the Database
 
@@ -356,44 +353,42 @@ rails db:migrate
 rails db:seed
 ```
 
-### Step 6: Install JavaScript Dependencies
 
-```bash
-# Install Node.js dependencies (if using npm/yarn)
-# This project uses importmap, so this step may not be necessary
-# But if you have package.json, run:
-npm install
-```
-
-### Step 7: Precompile Assets (Development)
+### Step 6: Precompile Assets (Development)
 
 ```bash
 # Precompile assets for development
 rails assets:precompile
 ```
 
-### Step 8: Start the Development Server
+### Step 7: Start the Development Server
 
 ```bash
-# Start the Rails server
-rails server
-
-# Or use bin/dev to start with all processes (if using Procfile.dev)
+# Use bin/dev to start the server, this will compile the tailwind css before running the server
 bin/dev
 ```
 
 The application should now be available at `http://localhost:3000`
 
-### Step 9: Verify Installation
-
-1. Open your browser and navigate to `http://localhost:3000`
-2. You should see the home page
-3. Try creating a new user account
-4. Test searching for a movie
-
 ---
 
 ## Development Setup
+
+### Confirming an account without confirmation email
+#### Using confirmation email provided in console
+On creation of a user the contents of the confirmation email should be pasted in the console containing the confirmation link.
+
+#### Through console
+```bash
+# Open rails console
+rails c
+
+# Get the user object of the user you want to confirm
+user = User.find_by(usename: "<username>")
+
+# Confrim the user
+user.confirm
+```
 
 ### Running Tests
 
@@ -401,14 +396,14 @@ The application should now be available at `http://localhost:3000`
 # Run all RSpec tests
 bundle exec rspec
 
-# Run with coverage
-COVERAGE=true bundle exec rspec
-
-# Run specific test file
-bundle exec rspec spec/models/user_spec.rb
+# Run rspec test on specific test file
+bundle exec rspec <specific-file.rb>
 
 # Run Cucumber acceptance tests
 bundle exec cucumber
+
+# Run Cucumber test on a speciifc file
+bundle exec cucumber<specific-file.rb>
 ```
 
 ### Database Management
@@ -431,7 +426,7 @@ rails dbconsole
 
 ```bash
 # Run RuboCop (code style checker)
-bundle exec rubocop
+rubocop -A
 
 # Run Brakeman (security scanner)
 bundle exec brakeman
@@ -454,165 +449,9 @@ rails about
 
 ## Production Deployment
 
-This application uses **Kamal** for Docker-based deployment. Kamal simplifies deployment by managing Docker containers, SSL certificates, and server configuration.
-
-### Prerequisites for Deployment
-
-1. **Server with SSH access** (VPS, cloud instance, etc.)
-2. **Docker installed on the server**
-3. **Domain name** (for SSL certificates)
-4. **Docker registry account** (Docker Hub, GitHub Container Registry, etc.)
-
-### Step 1: Configure Deployment
-
-Edit `config/deploy.yml`:
-
-```yaml
-service: csce606_fall2025_project3_group6
-
-image: your-dockerhub-username/csce606_fall2025_project3_group6
-
-servers:
-  web:
-    - your-server-ip-or-hostname
-
-proxy:
-  ssl: true
-  host: your-domain.com
-
-registry:
-  username: your-dockerhub-username
-  password:
-    - KAMAL_REGISTRY_PASSWORD
-
-env:
-  secret:
-    - RAILS_MASTER_KEY
-    - TMDB_ACCESS_TOKEN
-  clear:
-    SOLID_QUEUE_IN_PUMA: true
-    DATABASE_URL: postgresql://user:password@host:5432/database_name
-```
-
-### Step 2: Set Up Secrets
-
-```bash
-# Create secrets file
-mkdir -p .kamal
-touch .kamal/secrets
-
-# Add secrets (one per line):
-# KAMAL_REGISTRY_PASSWORD=your_dockerhub_token
-# RAILS_MASTER_KEY=your_rails_master_key
-# TMDB_ACCESS_TOKEN=your_tmdb_token
-```
-
-**Important**: Add `.kamal/secrets` to `.gitignore` (should already be there)
-
-### Step 3: Set Up Server Access
-
-```bash
-# Ensure SSH key is set up for passwordless access
-ssh-copy-id user@your-server-ip
-
-# Test connection
-ssh user@your-server-ip
-```
-
-### Step 4: Set Up PostgreSQL on Server
-
-You can either:
-- Use a managed PostgreSQL service (recommended)
-- Install PostgreSQL on the server
-- Use Kamal's accessory feature to run PostgreSQL in a container
-
-**Option A: Using Kamal Accessory (PostgreSQL in container)**
-
-Add to `config/deploy.yml`:
-
-```yaml
-accessories:
-  db:
-    image: postgres:16
-    host: your-server-ip
-    port: "127.0.0.1:5432:5432"
-    env:
-      clear:
-        POSTGRES_DB: cinematico_production
-        POSTGRES_USER: cinematico
-      secret:
-        - POSTGRES_PASSWORD
-    directories:
-      - db_data:/var/lib/postgresql/data
-```
-
-### Step 5: Build and Deploy
-
-```bash
-# Build the Docker image
-kamal build
-
-# Deploy the application
-kamal deploy
-
-# Or build and deploy in one command
-kamal deploy --build
-```
-
-### Step 6: Run Database Migrations
-
-```bash
-# Run migrations on production
-kamal app exec "rails db:migrate"
-```
-
-### Step 7: Verify Deployment
-
-1. Visit your domain: `https://your-domain.com`
-2. Check application logs: `kamal app logs`
-3. Check application status: `kamal app details`
-
-### Common Deployment Commands
-
-```bash
-# View logs
-kamal app logs -f
-
-# Open Rails console
-kamal app exec "rails console"
-
-# Open shell
-kamal app exec "bash"
-
-# Restart application
-kamal app restart
-
-# Rollback to previous version
-kamal app rollback
-
-# Stop application
-kamal app stop
-
-# Start application
-kamal app start
-```
-
-### Troubleshooting Deployment
-
-```bash
-# Check server connection
-kamal server exec "docker ps"
-
-# View container logs
-kamal app logs --lines 100
-
-# Check environment variables
-kamal app exec "env | grep RAILS"
-
-# Verify database connection
-kamal app exec "rails db:version"
-```
-
+This application is currentlly deployed using heroku at https://cinematico.app/ with the following addons:
+Heroku-Postgres
+Redis Cloud
 ---
 
 ## Configuration
