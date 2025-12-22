@@ -169,7 +169,7 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-http-cache (2.3.0)
+    faraday-http-cache (2.5.1)
       faraday (>= 0.8)
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
